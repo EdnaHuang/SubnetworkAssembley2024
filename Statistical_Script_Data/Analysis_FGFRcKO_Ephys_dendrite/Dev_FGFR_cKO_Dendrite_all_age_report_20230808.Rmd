@@ -1,0 +1,258 @@
+---
+title: "Develop_FGFRcKO_Dendrite_all_age"
+output:
+  html_document: default
+  pdf_document: default
+date: "2023-08-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+
+freshr::freshr()
+library(here)
+library(dplyr)
+library(car)
+library(sjPlot)
+library(gridExtra)
+library(knitr)
+library(tidyverse)
+library(ggbeeswarm)
+library(ggthemes)
+library(emmeans)
+library(parameters)
+library(bayestestR)
+library(ggplot2)
+library(ggsci)
+library(tinytex)
+library(extrafont)
+library(pbkrtest)
+library(lme4)
+library(lmeresampler)
+library(ggpubr)
+#list the Fonts in windows
+#windowsFonts()
+#set-theme for figure
+theme_set(theme_bw())
+theme_set (theme_classic(base_size = 10, base_family = "sans"))
+```
+
+```{r}
+source (here("src", "Develop_FGFRcKO_Ephys_Function_posthoc_20230731.R"))
+load (here("output","2023-08-02_Neurobiotin_Dendrite_FGFR-tri-Ncre_all_age_20230802.RData"))
+```
+
+#Figure-plot_raw_boot_facet_sex
+```{r,fig.width = 8, fig.asp = 1.5, echo = FALSE}
+a <- plot_raw_boot_facet_sex("total_length",
+         y_breaks = c(1:6 * 500), 
+         y_limits = c(0, 3000),
+         legend_position = "none")
+
+b <- plot_raw_boot_facet_sex("mean",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 60),
+         legend_position = "none")
+
+
+c <- plot_raw_boot_facet_sex("branch_pts",
+         y_breaks = c(1:6 * 10), 
+         y_limits = c(0, 40),
+         legend_position = "none")
+
+d <- plot_raw_boot_facet_sex("segment_number",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 80),
+         legend_position = "none")
+
+e <- plot_raw_boot_facet_sex("terminal_pts",
+         y_breaks = c(1:6 * 10), 
+         y_limits = c(0, 40),
+         legend_position = "none")
+
+f <- plot_raw_boot_facet_sex("polar_ratio",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1),
+         legend_position = "none")
+
+g <- plot_raw_boot_facet_sex("max_of_18_continous_bin",
+         y_breaks = c(1:6 * 500), 
+         y_limits = c(0, 2000),
+         legend_position = "none")
+
+h <- plot_raw_boot_facet_sex("count_of_max_of_18_continous_bin",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 60),
+         legend_position = "none")
+
+ggarrange(a, b,
+          c, d,
+          e, f,
+          g, h,
+          ncol = 2, nrow = 4)
+
+#ggsave("dendrites_all.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 3, height = 6, units = "in")
+```
+
+
+
+#Figure-merge sex_plot_raw_boot
+```{r,fig.width = 8, fig.asp = 1.5,echo = FALSE}
+a <- merge_sex_plot_raw_boot("total_length",
+         y_breaks = c(1:6 * 500), 
+         y_limits = c(0, 3000),
+         legend_position = "none")
+
+b <- merge_sex_plot_raw_boot("mean",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 60),
+         legend_position = "none")
+
+
+c <- merge_sex_plot_raw_boot("branch_pts",
+         y_breaks = c(1:6 * 10), 
+         y_limits = c(0, 40),
+         legend_position = "none")
+
+d <- merge_sex_plot_raw_boot("segment_number",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 80),
+         legend_position = "none")
+
+e <- merge_sex_plot_raw_boot("terminal_pts",
+         y_breaks = c(1:6 * 10), 
+         y_limits = c(0, 40),
+         legend_position = "none")
+
+f <- merge_sex_plot_raw_boot("polar_ratio",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1),
+         legend_position = "none")
+
+g <- merge_sex_plot_raw_boot("max_of_18_continous_bin",
+         y_breaks = c(1:6 * 500), 
+         y_limits = c(0, 2000),
+         legend_position = "none")
+
+h <- merge_sex_plot_raw_boot("count_of_max_of_18_continous_bin",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 60),
+         legend_position = "none")
+
+ggarrange(a, b,
+          c, d,
+          e, f,
+          g, h,
+          ncol = 2, nrow = 4)
+
+
+#ggsave("Dendrite_al_merge_sex.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 3, height = 6, units = "in")
+```
+
+
+#total_length
+```{r}
+report_main_effect("total_length")
+report_group_int_sex("total_length")
+#the most comprehensive comparison
+report_inter_age_group_sex("total_length")
+```
+
+```{r}
+merge_sex_report_age_int_group("total_length")
+```
+
+
+##mean
+```{r}
+report_main_effect("mean")
+report_group_int_sex("mean")
+#the most comprehensive comparison
+report_inter_age_group_sex("mean")
+```
+
+```{r}
+merge_sex_report_age_int_group("mean")
+```
+
+
+#branch_pts
+```{r}
+report_main_effect("branch_pts")
+report_group_int_sex("branch_pts")
+#the most comprehensive comparison
+report_inter_age_group_sex("branch_pts")
+```
+
+```{r}
+merge_sex_report_age_int_group("branch_pts")
+```
+
+
+#segment_number
+```{r}
+report_main_effect("segment_number")
+report_group_int_sex("segment_number")
+#the most comprehensive comparison
+report_inter_age_group_sex("segment_number")
+```
+
+```{r}
+merge_sex_report_age_int_group("segment_number")
+```
+
+
+#terminal_pts
+```{r}
+report_main_effect("terminal_pts")
+report_group_int_sex("terminal_pts")
+#the most comprehensive comparison
+report_inter_age_group_sex("terminal_pts")
+```
+
+```{r}
+merge_sex_report_age_int_group("terminal_pts")
+```
+
+
+#polar_ratio
+```{r}
+report_main_effect("polar_ratio")
+report_group_int_sex("polar_ratio")
+#the most comprehensive comparison
+report_inter_age_group_sex("polar_ratio")
+```
+
+```{r}
+merge_sex_report_age_int_group("polar_ratio")
+```
+
+
+#max_of_18_continous_bin
+```{r}
+report_main_effect("max_of_18_continous_bin")
+report_group_int_sex("max_of_18_continous_bin")
+#the most comprehensive comparison
+report_inter_age_group_sex("max_of_18_continous_bin")
+```
+
+```{r}
+merge_sex_report_age_int_group("max_of_18_continous_bin")
+```
+
+
+#count_of_max_of_18_continous_bin
+```{r}
+report_main_effect("count_of_max_of_18_continous_bin")
+report_group_int_sex("count_of_max_of_18_continous_bin")
+#the most comprehensive comparison
+report_inter_age_group_sex("count_of_max_of_18_continous_bin")
+```
+
+```{r}
+merge_sex_report_age_int_group("count_of_max_of_18_continous_bin")
+```
+
+
