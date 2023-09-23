@@ -1,0 +1,301 @@
+---
+title: "Develop_CommDetect_Uniform_CovM"
+output: html_document
+date: "2023-08-14"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+
+freshr::freshr()
+library(dplyr)
+library(car)
+library(sjPlot)
+library(gridExtra)
+library(knitr)
+library(tidyverse)
+library(ggbeeswarm)
+library(ggthemes)
+library(emmeans)
+library(parameters)
+library(bayestestR)
+library(ggplot2)
+library(ggsci)
+library(tinytex)
+library(extrafont)
+#list the Fonts in windows
+#windowsFonts()
+#set-theme for figure
+theme_set (theme_classic(base_size = 10, base_family = "sans"))
+
+##libraries for color
+library(ggsci)
+library(wesanderson)
+#names(wes_palettes)
+library(colorBlindness)
+library(viridis)
+```
+
+```{r}
+library(here)
+# only work this way, when code is located in analysis folder
+source (here("src", "Develop_Function_posthoc_20230219.R"))
+load (here("output","2023-02-19_SummaryDevAll_CommDetecUni_CovM_withCorrl_20230113.RData"))
+```
+
+# silhs_mean_before_stat
+```{r,fig.width = 4, fig.asp = 0.5, echo= FALSE}
+#Facet by layer
+plot_raw_boot_facet_layer ("silhs_mean_before_stat",
+                            y_breaks = c(1:6 * 0.2), 
+                            y_limits = c(0, 0.6),
+                            #legend_position = c(0.4, 0.85)
+                            legend_position = "none" )
+
+#Facet by sex
+plot_raw_boot_facet_sex ("silhs_mean_before_stat",
+                          y_breaks = c(1:6 * 0.2), 
+                          y_limits = c(0, .6), 
+                          legend_position = c(0.3, 0.8))
+
+#ggsave("FacetbySex.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 4, height = 2.5, units = "in")
+```
+
+```{r, fig.width = 5, fig.asp = 0.5}
+report_main_effect("silhs_mean_before_stat")
+#full comparison
+report_inter_age_sex_layer("silhs_mean_before_stat")
+```
+
+
+# subnetwork number
+```{r,fig.width = 5, fig.asp = 0.5, echo=FALSE}
+#Facet by layer
+plot_raw_boot_facet_layer ("n_cls",
+                            y_breaks = c(1:6 * 3), 
+                            y_limits = c(0, 15), 
+                          #legend_position = c(0.4, 0.85),
+                            legend_position = "none")
+
+#ggsave("n_cls.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 4, height = 2.5, units = "in")
+
+#Facet by sex
+plot_raw_boot_facet_sex ("n_cls",
+                          y_breaks = c(1:6 * 3), 
+                          y_limits = c(0, 15), 
+                          legend_position = c(0.3, 0.8))
+
+#ggsave("FacetbySex.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 4, height = 2, units = "in"
+```
+
+```{r, fig.width = 5, fig.asp = 0.5}
+report_main_effect("n_cls")
+#full comparison
+report_inter_age_sex_layer("n_cls")
+```
+
+# Cell not in subnetwork
+```{r,fig.width = 4, fig.asp = 0.5, echo=FALSE}
+#Facet by layer
+plot_raw_boot_facet_layer ("cells_not_in_assembly",
+                            y_breaks = c(1:6 * 20), 
+                            y_limits = c(0, 100), 
+                            #legend_position = c(0.4, 0.85)
+                            legend_position = "none")
+
+#ggsave("cells_not_in_assembly.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 4, height = 2, units = "in")
+
+#Facet by sex
+plot_raw_boot_facet_sex ("cells_not_in_assembly",
+                          y_breaks = c(1:6 * 20), 
+                          y_limits = c(0, 100), 
+                          legend_position = c(0.3, 0.8))
+
+#ggsave("FacetbySex.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 4, height = 2, units = "in")
+```
+
+```{r, fig.width = 5, fig.asp = 0.5}
+report_main_effect("cells_not_in_assembly")
+#full comparison
+report_inter_age_sex_layer("cells_not_in_assembly")
+```
+
+# Cell in single subnetwork
+```{r,fig.width = 5, fig.asp = 0.5, echo=FALSE}
+#Facet by layer
+plot_raw_boot_facet_layer ("cells_in_one_assembly",
+                            y_breaks = c(1:6 * 20), 
+                            y_limits = c(0, 100), 
+                            #legend_position = c(0.4, 0.85)
+                           legend_position = "none")
+
+ggsave("cells_in_one_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 2, units = "in")
+
+#Facet by sex
+plot_raw_boot_facet_sex ("cells_in_one_assembly",
+                          y_breaks = c(1:6 * 20), 
+                          y_limits = c(0, 100), 
+                          legend_position = c(0.3, 0.8))
+
+#ggsave("FacetbySex.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 5, height = 2.5, units = "in")
+```
+
+```{r, fig.width = 5, fig.asp = 0.5}
+report_main_effect("cells_in_one_assembly")
+#full comparison
+report_inter_age_sex_layer("cells_in_one_assembly")
+```
+
+
+# Cell in many subnetwork
+```{r,fig.width = 5, fig.asp = 0.5, echo=FALSE}
+#Facet by layer
+plot_raw_boot_facet_layer ("cells_in_many_assembly",
+                            y_breaks = c(1:6 * 20), 
+                            y_limits = c(0, 100), 
+                            #legend_position = c(0.3, 0.8)
+                            legend_position = "none")
+
+ggsave("cells_in_many_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 2, units = "in")
+
+#Facet by sex
+plot_raw_boot_facet_sex ("cells_in_many_assembly",
+                          y_breaks = c(1:6 * 20), 
+                          y_limits = c(0, 100), 
+                          legend_position = c(0.3, 0.8))
+
+#ggsave("FacetbySex.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 5, height = 2.5, units = "in")
+```
+
+```{r, fig.width = 5, fig.asp = 0.5}
+report_main_effect("cells_in_many_assembly")
+#full comparison
+report_inter_age_sex_layer("cells_in_many_assembly")
+```
+
+
+# r_allpair_mean
+```{r,fig.width = 4, fig.asp = 0.5, echo=FALSE}
+#Facet by layer
+plot_raw_boot_facet_layer ("r_allpair_mean",
+                            y_breaks = c(1:6 * 0.2), 
+                            y_limits = c(0.2, 1), 
+                            #legend_position = c(0.4, 0.85)
+                            legend_position = "none")
+
+ggsave("r_allpair_mean-facetLayer.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 2.5, units = "in")
+
+#Facet by sex
+plot_raw_boot_facet_sex ("r_allpair_mean",
+                          y_breaks = c(1:6 * 0.2), 
+                          y_limits = c(0.2, 1), 
+                          #legend_position = c(0.3, 0.8),
+                          legend_position = "none")
+
+ggsave("r_allpair_mean-facetSex.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 2.5, units = "in")
+```
+
+```{r, fig.width = 5, fig.asp = 0.5}
+report_main_effect("r_allpair_mean")
+#full comparison
+report_inter_age_sex_layer("r_allpair_mean")
+```
+
+# cluster_r_all_mean
+```{r,fig.width = 4, fig.asp = 0.5, echo=FALSE}
+#Facet by layer
+plot_raw_boot_facet_layer ("cluster_r_all_mean",
+                            y_breaks = c(1:6 * 0.2), 
+                            y_limits = c(0.2, 1), 
+                            #legend_position = c(0.4, 0.8)
+                            legend_position = "none")
+
+#ggsave("cluster_r_all_mean_facet_layer.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 4, height = 2.5, units = "in")
+
+#Facet by sex
+plot_raw_boot_facet_sex ("cluster_r_all_mean",
+                          y_breaks = c(1:6 * 0.2), 
+                          y_limits = c(0.2, 1), 
+                        #legend_position = c(0.2, 0.8),
+                          legend_position = "none")
+
+#ggsave("cluster_r_all_mean_facet_sex.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 4, height = 2.5, units = "in")
+```
+
+```{r, fig.width = 5, fig.asp = 0.5}
+report_main_effect("cluster_r_all_mean")
+#full comparison
+report_inter_age_sex_layer("cluster_r_all_mean")
+```
+
+
+# r_zf_allpair_mean
+```{r,fig.width = 4, fig.asp = 0.5, echo=FALSE}
+#Facet by layer
+plot_raw_boot_facet_layer ("r_zf_allpair_mean",
+                            y_breaks = c(1:6 * 0.2), 
+                            y_limits = c(0.2, 1), 
+                            legend_position = "none")
+
+#ggsave("r_zf_allpair_meanFacetbyLayer.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 4, height = 2.5, units = "in")
+
+#Facet by sex
+plot_raw_boot_facet_sex ("r_zf_allpair_mean",
+                          y_breaks = c(1:6 * 0.2), 
+                          y_limits = c(0.2, 1), 
+                          legend_position = c(0.3, 0.8))
+
+#ggsave("r_zf_allpair_meanFacetbySex.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 5, height = 2.5, units = "in")
+
+report_main_effect("r_zf_allpair_mean")
+```
+
+```{r, fig.width = 5, fig.asp = 0.5}
+#full comparison
+report_inter_age_sex_layer("r_zf_allpair_mean")
+```
+
+
+
+# cluster_r_zf_all_mean
+```{r,fig.width = 4, fig.asp = 0.5, echo=FALSE}
+#Facet by layer
+plot_raw_boot_facet_layer ("cluster_r_zf_all_mean",
+                            y_breaks = c(1:6 * 0.2), 
+                            y_limits = c(0.2, 1), 
+                            legend_position = "none")
+
+#ggsave("FacetbyLayer.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 4, height = 2.5, units = "in")
+
+#Facet by sex
+plot_raw_boot_facet_sex ("cluster_r_zf_all_mean",
+                          y_breaks = c(1:6 * 0.2), 
+                          y_limits = c(0.2, 1), 
+                          legend_position = c(0.3, 0.8))
+
+#ggsave("FacetbySex.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 5, height = 2.5, units = "in")
+
+report_main_effect("cluster_r_zf_all_mean")
+```
+
+```{r, fig.width = 5, fig.asp = 0.5}
+#full comparison
+report_inter_age_sex_layer("cluster_r_zf_all_mean")
+```

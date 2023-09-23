@@ -1,0 +1,241 @@
+---
+title: "Develop_Clustering comparison"
+output: html_document
+date: "2023-02-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+
+freshr::freshr()
+library(dplyr)
+library(car)
+library(sjPlot)
+library(gridExtra)
+library(knitr)
+library(tidyverse)
+library(ggbeeswarm)
+library(ggthemes)
+library(emmeans)
+library(parameters)
+library(bayestestR)
+library(ggplot2)
+library(ggsci)
+library(tinytex)
+library(extrafont)
+library(ggpubr)
+#list the Fonts in windows
+#windowsFonts()
+#set-theme for figure
+theme_set (theme_classic(base_size = 10, base_family = "sans"))
+
+##libraries for color
+library(ggsci)
+library(here)
+
+```
+
+
+```{r}
+#Figure plotting function
+plot_raw = function(var, data = df_lite, 
+                    y_breaks = c(1:6 * 0.5), 
+                    y_limits = c(0, 2), 
+                    legend_position = c(0.4, 0.5)) {
+df_lite %>%
+   select(f.age, sex, f.layer, var) %>%
+   tidyr::unite("group", sex:f.layer, sep = "-", remove = FALSE) %>%
+   ggplot(aes(x = f.age, y = get(var), color = group, group = group)) + 
+   #ggbeeswarm::geom_beeswarm(dodge.width = 0.4, alpha = 0.3) +
+   stat_summary(fun = "mean", geom = "line", linewidth = 0.4,
+                position = position_dodge(width = 0.4)) +
+   stat_summary(fun.data = "mean_cl_boot", size = 0.02, linewidth = 0.4, 
+                 position = position_dodge(width = 0.4)) +
+   scale_y_continuous(breaks = y_breaks, limits = y_limits) +
+   labs(x = "", y = "") + 
+   theme( legend.text = element_text(color = "black", size  = "8"),
+          legend.position = legend_position,
+          legend.title = element_blank(),
+          axis.text.x = element_text(color = "black", size = "8"),
+          axis.line.x.bottom = element_line (linewidth = 1/4),
+          axis.text.y = element_text(color = "black", size = "8"),
+          axis.line.y = element_line(linewidth = 1/4), 
+          axis.ticks.x = element_blank(),
+          plot.background = element_blank(),
+          plot.margin = unit(c(0,-0.15,0,0), 'cm')) + 
+    ggsci::scale_color_locuszoom() -> p
+return(p)
+  
+}
+```
+
+
+#For event, silh, subnetwork
+
+```{r}
+load (here("output","2023-02-19_SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.RData"))
+
+a <-plot_raw("s_assemblies",
+         y_breaks = c(1:6 * 10), y_limits = c(0, 50),
+        legend_position = "none")
+
+b <-plot_raw("m_assemblies",
+         y_breaks = c(1:6 * 2), y_limits = c(0, 10),
+        legend_position = "none")
+
+
+c <-plot_raw("silhs_mean_before_stat",
+         y_breaks = c(1:6 * 0.1), y_limits = c(0, 0.5),
+        legend_position = "none")
+
+d <-plot_raw("n_cls",
+         y_breaks = c(1:6 * 2), y_limits = c(0, 10),
+        legend_position = "none")
+
+ggarrange(a, b, c, d, ncol = 4, nrow = 1)
+
+ggsave("Kmean_CovM.svg", plot = last_plot(), path =here("output_plot"),
+       width = 5, height = 1.5, units = "in")
+```
+
+
+```{r}
+load (here("output","2023-02-19_SummaryDevAll_Kmean_Cosine_withCorr_20230113.RData"))
+
+e <-plot_raw("s_assemblies",
+         y_breaks = c(1:6 * 10), y_limits = c(0, 50),
+        legend_position = "none")
+
+f <-plot_raw("m_assemblies",
+         y_breaks = c(1:6 * 2), y_limits = c(0, 10),
+        legend_position = "none")
+
+
+g <-plot_raw("silhs_mean_before_stat",
+         y_breaks = c(1:6 * 0.1), y_limits = c(0, 0.5),
+        legend_position = "none")
+
+h <-plot_raw("n_cls",
+         y_breaks = c(1:6 * 2), y_limits = c(0, 10),
+        legend_position = "none")
+
+ggarrange(e, f, g,h, ncol = 4, nrow = 1)
+
+ggsave("cosine.svg", plot = last_plot(), path =here("output_plot"),
+       width = 5, height = 1.5, units = "in")
+
+```
+
+```{r}
+load (here("output","2023-02-19_SummaryDevAll_Kmean_Jaccard_withCorr_20230113.RData"))
+
+i <-plot_raw("s_assemblies",
+         y_breaks = c(1:6 * 10), y_limits = c(0, 50),
+        legend_position = "none")
+
+j <-plot_raw("m_assemblies",
+         y_breaks = c(1:6 * 2), y_limits = c(0, 10),
+        legend_position = "none")
+
+
+k <-plot_raw("silhs_mean_before_stat",
+         y_breaks = c(1:6 * 0.1), y_limits = c(0, 0.5),
+        legend_position = "none")
+
+l <-plot_raw("n_cls",
+         y_breaks = c(1:6 * 2), y_limits = c(0, 10),
+        legend_position = "none")
+
+ggarrange(i, j, k, l, ncol = 4, nrow = 1)
+
+ggsave("jaccard.svg", plot = last_plot(), path =here("output_plot"),
+       width = 5, height = 1.5, units = "in")
+
+```
+
+
+```{r}
+load (here("output","2023-02-19_SummaryDevAll_CommDetecUni_CovM_withCorrl_20230113.RData"))
+
+m <-plot_raw("s_assemblies",
+         y_breaks = c(1:6 * 10), y_limits = c(0, 50),
+        legend_position = "none")
+
+n <-plot_raw("m_assemblies",
+         y_breaks = c(1:6 * 2), y_limits = c(0, 10),
+        legend_position = "none")
+
+
+o <-plot_raw("silhs_mean_before_stat",
+         y_breaks = c(1:6 * 0.1), y_limits = c(0, 0.5),
+        legend_position = "none")
+
+p <-plot_raw("n_cls",
+         y_breaks = c(1:6 * 2), y_limits = c(0, 10),
+        legend_position = "none")
+
+ggarrange(m, n, o, p, ncol = 4, nrow = 1)
+
+
+ggsave("CommDetecUni_CovM.svg", plot = last_plot(), path =here("output_plot"),
+       width = 5, height = 1.5, units = "in")
+
+```
+
+```{r}
+load (here("output","2023-02-19_SummaryDevAll_CommDetecAsy_CovM_withCorr_20230113.RData"))
+
+q <-plot_raw("s_assemblies",
+         y_breaks = c(1:6 * 10), y_limits = c(0, 50),
+        legend_position = "none")
+
+r <-plot_raw("m_assemblies",
+         y_breaks = c(1:6 * 2), y_limits = c(0, 10),
+        legend_position = "none")
+
+
+s <-plot_raw("silhs_mean_before_stat",
+         y_breaks = c(1:6 * 0.1), y_limits = c(0, 0.5),
+        legend_position = "none")
+
+t <-plot_raw("n_cls",
+         y_breaks = c(1:6 * 2), y_limits = c(0, 10),
+        legend_position = "none")
+
+ggarrange(q, r, s, t, ncol = 4, nrow = 1)
+ggsave("CommDetecAsy_CovM.svg", plot = last_plot(), path =here("output_plot"),
+       width = 5, height = 1.5, units = "in")
+
+
+ggarrange(a,b,c,d,
+          e,f,g,h,
+          i,j,k,l,
+          m,n,o,p,
+          q,r,s,t,
+          ncol = 4, nrow = 5)
+
+ggsave("All.svg", plot = last_plot(), path =here("output_plot"),
+       width = 7, height = 8, units = "in")
+
+```
+
+
+
+# silhs_mean_before_stat
+```{r,fig.width = 4, fig.asp = 0.5}
+#Facet by layer
+plot_raw("silhs_mean_before_stat",
+         y_breaks = c(1:6 * 0.2), y_limits = c(0, 0.6),
+        #legend_position = "none",
+        legend_position = c(0.4, 0.5))
+
+ggsave("silhs_mean_before_stat.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 2.5, units = "in")
+```
+
+
+
+## R Markdown
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
