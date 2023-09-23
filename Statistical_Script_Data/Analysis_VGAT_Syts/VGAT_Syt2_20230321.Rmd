@@ -1,0 +1,193 @@
+---
+title: "VGAT and Syt2 staining"
+output: html_document
+date: "2023-03-21"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+
+freshr::freshr()
+library(dplyr)
+library(car)
+library(sjPlot)
+library(gridExtra)
+library(knitr)
+library(tidyverse)
+library(ggbeeswarm)
+library(ggthemes)
+library(emmeans)
+library(parameters)
+library(bayestestR)
+library(ggplot2)
+library(ggsci)
+library(tinytex)
+library(tidyr)
+library(extrafont)
+library(ggpubr)
+#list the Fonts in windows
+#windowsFonts()
+#set-theme for figure
+theme_set (theme_classic(base_size = 10, base_family = "sans"))
+
+##libraries for color
+library(ggsci)
+#library(wesanderson)
+#names(wes_palettes)
+#library(colorBlindness)
+#library(viridis)
+
+library(here)
+# only work this way, when code is located in analysis folder
+source (here("src", "VGAT_Syt2_Function_posthoc_20230319.R"))
+```
+
+
+```{r}
+load(here("output", "2023-03-21_P15_VGAT_SYT2_20230318.RData"))
+```
+
+
+# density_number_100_um_3_vgat_number
+```{r,fig.width = 2, fig.asp = 1}
+plot_raw_boot_facet_layer("density_number_100_um_3_vgat_number",
+         y_breaks = c(1:6 * 4), 
+         y_limits = c(0, 20),
+         legend_position = "none")
+#ggsave("Density_VGAT.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 2, height = 2, units = "in")
+
+#plot_raw_boot_facet_sex("density_number_100_um_3_vgat_number",
+#         y_breaks = c(1:6 * 5), 
+#         y_limits = c(0, 25),
+#         legend_position = "none")
+
+```
+
+```{r,fig.width = 5, fig.asp = 0.5}
+report_main_effect("density_number_100_um_3_vgat_number")
+report_interaction("density_number_100_um_3_vgat_number", var_int1 = "layer", var_int2 = "sex")
+```
+
+# density_number_100_um_3_syt2_number
+```{r,fig.width = 2, fig.asp =1}
+plot_raw_boot_facet_layer("density_number_100_um_3_syt2_number",
+         y_breaks = c(1:6 * 3), 
+         y_limits = c(0, 18),
+         legend_position = "none")
+
+#plot_raw_boot_facet_sex("density_number_100_um_3_syt2_number",
+#         y_breaks = c(1:6 * 5), 
+#         y_limits = c(0, 25),
+#         legend_position = "none")
+
+
+#ggsave("Fig.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 3, height = 2, units = "in")
+```
+
+```{r,fig.width = 2, fig.asp = 1}
+report_main_effect("density_number_100_um_3_syt2_number")
+report_interaction("density_number_100_um_3_syt2_number", var_int1 = "layer", var_int2 = "sex")
+```
+
+# density_of_colocalized_signal_vgat_and_syt2_punctate_number
+```{r,fig.width = 2, fig.asp =1}
+plot_raw_boot_facet_layer("density_of_colocalized_signal_number_100_um_3_vgat_and_syt2_punctate_number",
+         y_breaks = c(1:6 * 3), 
+         y_limits = c(0, 15),
+         legend_position = "none")
+
+#plot_raw_boot_facet_sex("density_of_colocalized_signal_number_100_um_3_vgat_and_syt2_punctate_number",
+#         y_breaks = c(1:6 * 5), 
+#         y_limits = c(0, 20),
+#         legend_position = "right")
+
+
+#ggsave("Fig.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 3, height = 2, units = "in")
+```
+
+```{r,fig.width = 2, fig.asp = 1}
+report_main_effect("density_of_colocalized_signal_number_100_um_3_vgat_and_syt2_punctate_number")
+report_interaction("density_of_colocalized_signal_number_100_um_3_vgat_and_syt2_punctate_number", var_int1 = "layer", var_int2 = "sex")
+```
+
+
+# percentage_of_vgat_and_syt2_punctate_vgat_punctate
+```{r,fig.width = 2, fig.asp =1}
+plot_raw_boot_facet_layer("percentage_of_vgat_and_syt2_punctate_vgat_punctate",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 100),
+         legend_position = "none")
+
+#plot_raw_boot_facet_sex("percentage_of_vgat_and_syt2_punctate_vgat_punctate",
+#         y_breaks = c(1:6 * 5), 
+#         y_limits = c(0, 20),
+#         legend_position = "right")
+
+
+#ggsave("Fig.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 3, height = 2, units = "in")
+```
+
+```{r,fig.width = 2, fig.asp = 1}
+report_main_effect("percentage_of_vgat_and_syt2_punctate_vgat_punctate")
+report_interaction("percentage_of_vgat_and_syt2_punctate_vgat_punctate", var_int1 = "layer", var_int2 = "sex")
+```
+
+# percentage_of_vgat_and_syt2_punctate_syt2_punctate
+```{r,fig.width = 2, fig.asp =1}
+plot_raw_boot_facet_layer("percentage_of_vgat_and_syt2_punctate_syt2_punctate",
+         y_breaks = c(1:6 * 30), 
+         y_limits = c(0, 150),
+         legend_position = "none")
+
+#plot_raw_boot_facet_sex("percentage_of_vgat_and_syt2_punctate_syt2_punctate",
+#         y_breaks = c(1:6 * 5), 
+#         y_limits = c(0, 20),
+#         legend_position = "right")
+
+
+#ggsave("Fig.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 3, height = 2, units = "in")
+```
+
+```{r,fig.width = 2, fig.asp = 1}
+report_main_effect("percentage_of_vgat_and_syt2_punctate_syt2_punctate")
+report_interaction("percentage_of_vgat_and_syt2_punctate_syt2_punctate", var_int1 = "layer", var_int2 = "sex")
+```
+
+
+
+#Generating figure
+```{r,fig.width = 5, fig.asp = 0.5}
+a <- plot_raw_boot_facet_layer("density_number_100_um_3_vgat_number",
+         y_breaks = c(1:6 * 5), 
+         y_limits = c(0, 25),
+         legend_position = "none")
+
+b <- plot_raw_boot_facet_layer("density_number_100_um_3_syt2_number",
+         y_breaks = c(1:6 * 4), 
+         y_limits = c(0, 20),
+         legend_position = "none")
+
+
+c <- plot_raw_boot_facet_layer("density_of_colocalized_signal_number_100_um_3_vgat_and_syt2_punctate_number",
+         y_breaks = c(1:6 * 4), 
+         y_limits = c(0, 20),
+         legend_position = "none")
+
+
+ggarrange(a, b, c, ncol = 3, nrow = 1)
+
+#ggsave("Density.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 7, height = 2, units = "in")
+```
+
+
+
+## R Markdown
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
