@@ -1,0 +1,267 @@
+---
+title: "WT_Dlx_GsDREADD_basicParam"
+output: html_document
+date: "2023-02-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+
+freshr::freshr()
+library(dplyr)
+library(car)
+library(sjPlot)
+library(gridExtra)
+library(knitr)
+library(tidyverse)
+library(ggbeeswarm)
+library(ggthemes)
+library(emmeans)
+library(parameters)
+library(bayestestR)
+library(ggplot2)
+library(ggsci)
+library(tinytex)
+library(tidyr)
+library(extrafont)
+#list the Fonts in windows
+#windowsFonts()
+#set-theme for figure
+theme_set (theme_classic(base_size = 10, base_family = "sans"))
+
+##libraries for color
+library(ggsci)
+library(wesanderson)
+#names(wes_palettes)
+library(colorBlindness)
+library(viridis)
+
+library(here)
+# only work this way, when code is located in analysis folder
+source (here("src", "WT_Dlx_GsDREADD_Function_posthoc_20230217.R"))
+load (here("output","2023-02-17_Caseboot_SummaryWT_Dlx_GsDREADD_basicPara_20230113.RData"))
+```
+
+# event_freq
+```{r,fig.width = 2.5, fig.asp =0.8}
+plot_raw ("event_freq",
+         y_breaks = c(1:6 *1), 
+         y_limits = c(0, 3), 
+         legend_position = "right")
+
+plot_raw_facet_layer("event_freq",
+         y_breaks = c(1:6 * 1), 
+         y_limits = c(0, 3),
+         legend_position = "none")
+ggsave("event_freq.svg", plot = last_plot(), path =here("output_plot"),
+       width = 1.85, height = 2.2, units = "in")
+
+plot_raw_facet_sex("event_freq",
+         y_breaks = c(1:6 * 1), 
+         y_limits = c(0, 3), 
+         legend_position = "none")
+
+ggsave("event_freq.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+
+```{r,fig.width = 5, fig.asp = 0.5}
+report_main("event_freq")
+report_all_interaction_simple("event_freq", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("event_freq", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("event_freq", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("event_freq", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+# synchrony_freq
+```{r,fig.width = 2, fig.asp = 1}
+plot_raw ("synchrony_freq",
+         y_breaks = c(1:6 * 1), 
+         y_limits = c(0, 4), 
+         legend_position = "right")
+
+plot_raw_facet_layer("synchrony_freq",
+         y_breaks = c(1:6 * 1), 
+         y_limits = c(0, 4), 
+         legend_position = "none")
+ggsave("synchrony_freq.svg", plot = last_plot(), path =here("output_plot"),
+       width = 1.85, height = 2.2, units = "in")
+
+plot_raw_facet_sex("synchrony_freq",
+         y_breaks = c(1:6 * 1), 
+         y_limits = c(0, 4), 
+         legend_position = "none")
+
+
+ggsave("synchrony_freq.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("synchrony_freq")
+report_all_interaction_simple("synchrony_freq", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("synchrony_freq", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("synchrony_freq", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("synchrony_freq", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+
+# synchrony_peak
+```{r,fig.width = 3, fig.asp = 0.8}
+plot_raw ("synchrony_peak",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 0.6),
+         legend_position = "none")
+
+ggsave("synchrony_peak.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 2.2, units = "in")
+
+#plot_raw_facet_layer("synchrony_peak",
+#        y_breaks = c(1:6 * 1), 
+#         y_limits = c(0, 0.6), 
+#         legend_position = "none")
+
+plot_raw_facet_sex("synchrony_peak",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 0.6), 
+         legend_position = "none")
+ggsave("synchrony_peak.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("synchrony_peak")
+report_all_interaction_simple("synchrony_peak", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("synchrony_peak", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+#report_interaction("synchrony_peak", var_int1 = "p15_cno", var_int2 = "sex")
+#report_interaction("synchrony_peak", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+
+# amp
+```{r,fig.width = 5, fig.asp = 0.5}
+plot_raw ("amp",
+         y_breaks = c(1:9 * 4), 
+         y_limits = c(0, 16), 
+         legend_position = "none")
+
+ggsave("amp.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("amp")
+report_all_interaction_simple("amp", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("amp", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+# duration
+```{r,fig.width = 5, fig.asp = 0.5}
+plot_raw ("duration",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(150, 250),
+         legend_position = "right")
+
+ggsave("duration.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("duration")
+report_all_interaction_simple("duration", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("duration", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+# area
+```{r,fig.width = 5, fig.asp = 0.5}
+plot_raw ("area",
+         y_breaks = c(1:6 * 10), 
+         y_limits = c(0, 50), 
+         legend_position = "none")
+
+ggsave("area.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("area")
+report_all_interaction_simple("area", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("area", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+# rcorr_mean
+```{r, fig.width = 5, fig.asp = 0.5}
+plot_raw ("rcorr_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1), 
+         legend_position = "right")
+
+#ggsave("rcorr_mean.svg", plot = last_plot(), path =here("output_plot"),
+#       width = 4, height = 2.2, units = "in")
+
+plot_raw_facet_layer("rcorr_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1), 
+         legend_position = "none")
+ggsave("rcorr_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+plot_raw_facet_sex("rcorr_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1), 
+         legend_position = "none")
+
+ggsave("rcorr_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("rcorr_mean")
+report_all_interaction_simple("rcorr_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("rcorr_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+# r_in_distance_before100_mean
+```{r, fig.width = 5, fig.asp = 0.5}
+plot_raw ("r_in_distance_before100_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1), 
+         legend_position = "right")
+
+ggsave("before100_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 2.2, units = "in")
+
+plot_raw_facet_layer("rcorr_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1), 
+         legend_position = "none")
+ggsave("before100_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+plot_raw_facet_sex("rcorr_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1), 
+         legend_position = "none")
+ggsave("before100_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+```
+
+```{r}
+report_main("r_in_distance_before100_mean")
+report_all_interaction_simple("r_in_distance_before100_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("r_in_distance_before100_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+#report_interaction("r_in_distance_before100_mean", var_int1 = "p15_cno", var_int2 = "sex")
+#report_interaction("r_in_distance_before100_mean", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+
+
+## R Markdown
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

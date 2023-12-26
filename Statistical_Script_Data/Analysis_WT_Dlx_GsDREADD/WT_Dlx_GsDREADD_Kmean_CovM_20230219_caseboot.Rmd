@@ -1,0 +1,400 @@
+---
+title: "WT_Dlx_GsDREADD_Kmean_CovM"
+output: html_document
+date: "2023-02-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+
+freshr::freshr()
+library(dplyr)
+library(car)
+library(sjPlot)
+library(gridExtra)
+library(knitr)
+library(tidyverse)
+library(ggbeeswarm)
+library(ggthemes)
+library(emmeans)
+library(parameters)
+library(bayestestR)
+library(ggplot2)
+library(ggsci)
+library(tinytex)
+library(tidyr)
+library(extrafont)
+#list the Fonts in windows
+#windowsFonts()
+#set-theme for figure
+theme_set (theme_classic(base_size = 10, base_family = "sans"))
+
+##libraries for color
+library(ggsci)
+library(wesanderson)
+#names(wes_palettes)
+library(colorBlindness)
+library(viridis)
+
+library(here)
+# only work this way, when code is located in analysis folder
+source (here("src", "WT_Dlx_GsDREADD_Function_posthoc_20230217.R"))
+load (here("output","2023-02-17_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_20230113.RData"))
+```
+
+# silhs_mean_before_stat
+```{r,fig.width = 2, fig.asp =1}
+plot_raw ("silhs_mean_before_stat",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 0.6), 
+         legend_position = "right")
+
+plot_raw_facet_layer("silhs_mean_before_stat",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 0.6), 
+         legend_position = "right")
+ggsave("silhs_mean_before_stat.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+
+plot_raw_facet_sex("silhs_mean_before_stat",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 0.6), 
+         legend_position = "none")
+
+
+```
+
+```{r,fig.width = 5, fig.asp = 0.5}
+report_main("silhs_mean_before_stat")
+report_all_interaction_simple("silhs_mean_before_stat", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("silhs_mean_before_stat", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("silhs_mean_before_stat", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("silhs_mean_before_stat", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+# subnetwork number
+```{r,fig.width = 2, fig.asp = 1}
+plot_raw ("n_cls",
+         y_breaks = c(1:6 * 2), 
+         y_limits = c(0, 12), 
+         legend_position = "right")
+
+plot_raw_facet_layer("n_cls",
+         y_breaks = c(1:6 * 5), 
+         y_limits = c(0, 15), 
+         legend_position = "none")
+ggsave("n_cls.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+plot_raw_facet_sex("n_cls",
+         y_breaks = c(1:6 * 5), 
+         y_limits = c(0, 15), 
+         legend_position = "none")
+
+ggsave("n_cls.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("n_cls")
+report_all_interaction_simple("n_cls", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("n_cls", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("n_cls", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("n_cls", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+
+# Cell not in subnetwork
+```{r,fig.width = 2, fig.asp = 1}
+plot_raw ("cells_not_in_assembly",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 100), 
+         legend_position = "right")
+
+plot_raw_facet_layer("cells_not_in_assembly",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 100), 
+         legend_position = "none")
+ggsave("cells_not_in_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+
+plot_raw_facet_sex("cells_not_in_assembly",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 100), 
+         legend_position = "none")
+
+ggsave("cells_not_in_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+
+
+```{r}
+report_main("cells_not_in_assembly")
+report_all_interaction_simple("cells_not_in_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("cells_not_in_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("cells_not_in_assembly", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("cells_not_in_assembly", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+
+# Cell in single subnetwork
+```{r,fig.width = 2, fig.asp = 1}
+plot_raw ("cells_in_one_assembly",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 100), 
+         legend_position = "right")
+
+plot_raw_facet_layer("cells_in_one_assembly",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 100), 
+         legend_position = "none")
+ggsave("cells_in_one_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width =2, height = 2.2, units = "in")
+
+plot_raw_facet_sex("cells_in_one_assembly",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 100), 
+         legend_position = "none")
+
+ggsave("cells_in_one_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width =2, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("cells_in_one_assembly")
+report_all_interaction_simple("cells_in_one_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("cells_in_one_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("cells_in_one_assembly", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("cells_in_one_assembly", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+
+# Cell in many subnetwork
+```{r,fig.width = 2, fig.asp = 1}
+plot_raw ("cells_in_many_assembly",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 100), 
+         legend_position = "right")
+
+plot_raw_facet_layer("cells_in_many_assembly",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 100), 
+         legend_position = "none")
+
+ggsave("Cell in many subnetwork.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+
+
+plot_raw_facet_sex("cells_in_many_assembly",
+         y_breaks = c(1:6 * 20), 
+         y_limits = c(0, 100), 
+         legend_position = "none")
+
+ggsave("Cell in many subnetwork.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+
+```
+```{r}
+report_main("cells_in_many_assembly")
+report_all_interaction_simple("cells_in_many_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("cells_in_many_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("cells_in_many_assembly", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("cells_in_many_assembly", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+# r_allpair_mean
+```{r,fig.width = 2, fig.asp = 1}
+plot_raw ("r_allpair_mean",
+         y_breaks = c(1:6 * 0.5), 
+         y_limits = c(-0.5, 1), 
+         legend_position = "right")
+
+plot_raw_facet_layer("r_allpair_mean",
+         y_breaks = c(1:6 * 0.5), 
+         y_limits = c(0, 1), 
+         legend_position = "right")
+ggsave("r_allpair_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+
+plot_raw_facet_sex("r_allpair_mean",
+         y_breaks = c(1:6 * 0.5), 
+         y_limits = c(-0.5, 1), 
+         legend_position = "none")
+
+
+ggsave("r_allpair_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+```{r}
+report_main("r_allpair_mean")
+report_all_interaction_simple("r_allpair_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("r_allpair_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("r_allpair_mean", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("r_allpair_mean", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+# cluster_r_all_mean
+```{r, fig.width = 2, fig.asp = 1}
+plot_raw ("cluster_r_all_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0.3, 0.9), 
+         legend_position = "none")
+
+plot_raw_facet_sex("cluster_r_all_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0.3, 1), 
+         #legend_position = "right"
+         legend_position = "none")
+
+plot_raw_facet_layer("cluster_r_all_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0.3, 0.9), 
+         #legend_position = "right"
+         legend_position = "none")
+
+ggsave("cluster_r_all_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("cluster_r_all_mean")
+report_all_interaction_simple("cluster_r_all_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("cluster_r_all_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("cluster_r_all_mean", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("cluster_r_all_mean", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+
+# cluster_r_zf_all_mean
+```{r, fig.width = 2, fig.asp = 1}
+plot_raw ("cluster_r_zf_all_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1), 
+         legend_position = "right")
+
+plot_raw_facet_layer("cluster_r_zf_all_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1), 
+         legend_position = "none")
+ggsave("cluster_r_zf_all_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+plot_raw_facet_sex("cluster_r_zf_all_mean",
+         y_breaks = c(1:6 * 0.2), 
+         y_limits = c(0, 1), 
+         legend_position = "right")
+
+ggsave("cluster_r_zf_all_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("cluster_r_zf_all_mean")
+report_all_interaction_simple("cluster_r_zf_all_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("cluster_r_zf_all_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("cluster_r_zf_all_mean", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("cluster_r_zf_all_mean", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+
+# distance-neuron:centroid
+```{r, fig.width = 3, fig.asp = 1}
+plot_raw ("neuron_centroid",
+         y_breaks = c(1:6 * 50), 
+         y_limits = c(0, 200), 
+         legend_position = "right")
+
+plot_raw_facet_layer("neuron_centroid",
+         y_breaks = c(1:6 * 50), 
+         y_limits = c(0, 200), 
+         legend_position = "right")
+
+plot_raw_facet_sex("neuron_centroid",
+         y_breaks = c(1:6 * 50), 
+         y_limits = c(0, 200), 
+         legend_position = "none")
+
+ggsave("neuron_centroid.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+
+```
+
+```{r}
+report_main("neuron_centroid")
+report_all_interaction_simple("neuron_centroid", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("neuron_centroid", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("neuron_centroid", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("neuron_centroid", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+
+
+# distance-pw neuron-neuron
+```{r, fig.width = 3, fig.asp = 1}
+plot_raw ("pw_neuron_neuron",
+         y_breaks = c(1:6 * 50), 
+         y_limits = c(0, 250), 
+         legend_position = "right")
+
+plot_raw_facet_layer("pw_neuron_neuron",
+         y_breaks = c(1:6 * 50), 
+         y_limits = c(0, 250), 
+         legend_position = "right")
+
+plot_raw_facet_sex("pw_neuron_neuron",
+         y_breaks = c(1:6 * 50), 
+         y_limits = c(0, 250), 
+         legend_position = "non")
+
+ggsave("pw_neuron_neuron.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("pw_neuron_neuron")
+report_all_interaction_simple("pw_neuron_neuron", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("pw_neuron_neuron", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("pw_neuron_neuron", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("pw_neuron_neuron", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+# distance-centroid-centroid
+```{r, fig.width = 2, fig.asp = 1}
+plot_raw ("centroid_centroid",
+         y_breaks = c(1:6 * 100), 
+         y_limits = c(0,400), 
+         legend_position = "right")
+
+plot_raw_facet_layer("centroid_centroid",
+         y_breaks = c(1:8 * 100), 
+         y_limits = c(0, 400), 
+         legend_position = "right")
+
+plot_raw_facet_sex("centroid_centroid",
+         y_breaks = c(1:8 * 100), 
+         y_limits = c(0, 400), 
+         legend_position = "none")
+
+ggsave("centroid-centroid.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 2.2, units = "in")
+```
+
+```{r}
+report_main("centroid_centroid")
+report_all_interaction_simple("centroid_centroid", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_all_interaction("centroid_centroid", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+report_interaction("centroid_centroid", var_int1 = "p15_cno", var_int2 = "sex")
+report_interaction("centroid_centroid", var_int1 = "p15_cno", var_int2 = "f.layer")
+```
+
+
+
+## R Markdown
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
