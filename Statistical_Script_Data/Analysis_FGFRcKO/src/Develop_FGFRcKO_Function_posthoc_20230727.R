@@ -76,14 +76,14 @@ plot_raw_boot_facet_layer = function(x, var_name = x,title = x,
   layer.label = c("Layer 2/3", "Layer 4")
   names(layer.label) = c("2", "4")
   
-   # extract replicates
+  # extract replicates
   mod_boot = boot_model_extract_raw(x)
   
   # use original data set instead
   # https://tibble.tidyverse.org/reference/subsetting.html
   # the subsetting behavior is somewhat different in tibbles lol
   df_lite$yvar = df_lite[, x, drop = TRUE]
- 
+  
   # marginal effect point estimates and CI 
   emms = emmip(mod_boot, group ~ f.age | f.layer, CIs = TRUE, plotit = FALSE)
   emm_plot = ggplot(emms, aes(x = f.age, y = yvar, color = group)) +
@@ -96,7 +96,6 @@ plot_raw_boot_facet_layer = function(x, var_name = x,title = x,
     facet_wrap(~ f.layer,labeller = labeller(f.layer =layer.label),
                strip.position = "bottom") +
     labs(x = "", y= "", color = "group") +
-    ggtitle(title)+
     theme(strip.text = element_text(size = 10), 
           strip.background = element_blank(),
           strip.placement = ("outside"),
@@ -163,38 +162,21 @@ report_main_effect = function(x, var_name = x) {
   
   table1 = kable(anova,caption = "ANOVA table before bootstrapping", digits = 3)
   print(table1)
-  
-  table2 = kable(list(emm_param_group, emm_param_age, emm_param_layer), digits = 3)
+
+  table2 = kable(emm_param_group,caption = "Main effect after bootstrapping", digits = 3)
   print(table2)
+  
+  table3 = kable(emm_param_age, digits = 3)
+  print(table3)
+  
+  table4 = kable(emm_param_layer, digits = 3)
+  print(table4)
+  
+  
 }
 
 
 
-
-## report group inter layer ---------
-report_group_int_layer = function(x, var_name = x) {
-  
-  # extract bootstrapped coef by model class
-  if (x %in% names(case_boot_list)) {
-    mod_boot = lmer_boot_extract(x)
-  } else {
-    mod_boot = lm_boot_extract(x)
-  }
-  
-  # simple comparisons
-  emm = emmeans(mod_boot, ~ group* f.layer)
-  
-  #compare
-  emm_contr_group = contrast(emm, method = "pairwise")
-  emm_param_group = as.data.frame(model_parameters(
-    emm_contr_group, centrality = c("median", "mean"), test = "pd"))
-  emm_param_group$pval = pd_to_p(emm_param_group$pd)
-  emm_param_group$Median.1 = NULL
-  
-  # print formatted tables in sequence
-  table = kable (emm_param_group, digits = 3)
-  print(table)
-}
 
 
 ## report age-group-layer -----the most comprehensive comparison--------------
@@ -232,49 +214,14 @@ report_inter_age_group_layer = function(x, var_name = x) {
   emm_param_layer$Median.1 = NULL
   
   # print formatted tables in sequence
-  table = kable (list(emm_param_group,emm_param_age,emm_param_layer), digits = 3)
-  print(table)
-}
-
-
-## report age-group-layer -----the most comprehensive comparison-simplified--------------
-report_inter_age_group_layer_V2 = function(x, var_name = x) {
+  table1 = kable (emm_param_group,
+                  caption = "Post-hoc comparison with bootstrapping output", digits = 3)
+  print(table1)
+  table2 = kable (emm_param_age,digits = 3)
+  print(table2)
+  table3 = kable (emm_param_layer,digits = 3)
+  print(table3)
   
-  # extract bootstrapped coef by model class
-  if (x %in% names(case_boot_list)) {
-    mod_boot = lmer_boot_extract(x)
-  } else {
-    mod_boot = lm_boot_extract(x)
-  }
-  # simple comparisons
-  emm = emmeans(mod_boot, ~ group* f.layer*f.age)
-  
-  # age
-  emm_contr_age = contrast(emm, method = "pairwise", simple = "f.age")
-  #emm_contr_age = contrast(emm, method = pw_emm_contr, simple = "f.age")
-  emm_param_age = as.data.frame(model_parameters(
-    emm_contr_age, centrality = c("median", "mean"), test = "pd"))
-  emm_param_age$pval = pd_to_p(emm_param_age$pd)
-  emm_param_age$Median.1 = NULL
-  
-  # group
-  #emm_contr_group = contrast(emm, method = "consec", simple = "group")
-  #emm_param_group = as.data.frame(model_parameters(
-  #  emm_contr_group, centrality = c("median", "mean"), test = "pd"))
-  #emm_param_group$pval = pd_to_p(emm_param_group$pd)
-  #emm_param_group$Median.1 = NULL
-  
-  # layer
-  #emm_contr_layer = contrast(emm, method = "consec", simple = "f.layer")
-  #emm_param_layer = as.data.frame(model_parameters(
-  #  emm_contr_layer, centrality = c("median", "mean"), test = "pd"))
-  #emm_param_layer$pval = pd_to_p(emm_param_layer$pd)
-  #emm_param_layer$Median.1 = NULL
-  
-  # print formatted tables in sequence
-  #table = kable (list(emm_param_group,emm_param_age,emm_param_layer), digits = 3)
-  table = kable (list(emm_param_group), digits = 3)
-  print(table)
 }
 
 
@@ -326,44 +273,5 @@ merge_layer_plot_raw_boot = function(x, var_name = x,
   return(p)
   
 }
-
-
-
-## Merge layer, then report interaction between age and group---------
-
-merge_layer_report_age_int_group = function(x, var_name = x) {
-  
-  # extract bootstrapped coef by model class
-  if (x %in% names(case_boot_list)) {
-    mod_boot = lmer_boot_extract(x)
-  } else {
-    mod_boot = lm_boot_extract(x)
-  }
-  
-  # simple comparisons
-  emm = emmeans(mod_boot, ~ f.age * group)
-  
-  # age
-  emm_contr_age = contrast(emm, method = "pairwise", simple = "f.age")
-  #emm_contr_age = contrast(emm, method = pw_emm_contr, simple = "f.age")
-  emm_param_age = as.data.frame(model_parameters(
-    emm_contr_age, centrality = c("median", "mean"), test = "pd"))
-  emm_param_age$pval = pd_to_p(emm_param_age$pd)
-  emm_param_age$Median.1 = NULL
-  
-  # group
-  emm_contr_group = contrast(emm, "consec", simple = "group")
-  emm_param_group = as.data.frame(model_parameters(
-    emm_contr_group, centrality = c("median", "mean"), test = "pd"))
-  emm_param_group$pval = pd_to_p(emm_param_group$pd)
-  emm_param_group$Median.1 = NULL
-  
-  # print formatted tables in sequence
-  table = kable (list(emm_param_group, emm_param_age), digits = 3)
-  print(table)
-}
-
-
-
 
 
