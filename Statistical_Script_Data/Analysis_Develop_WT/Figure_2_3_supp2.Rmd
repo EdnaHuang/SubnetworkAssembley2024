@@ -1,0 +1,198 @@
+---
+title: "Figure 2, Figure 3, and Figure Supp2"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, comment = NA)
+
+freshr::freshr()
+library(dplyr)
+library(car)
+library(sjPlot)
+library(gridExtra)
+library(knitr)
+library(tidyverse)
+library(ggbeeswarm)
+library(ggthemes)
+library(emmeans)
+library(parameters)
+library(bayestestR)
+library(ggplot2)
+library(ggsci)
+library(tinytex)
+library(extrafont)
+#list the Fonts in windows
+#windowsFonts()
+#set-theme for figure
+theme_set (theme_classic(base_size = 10, base_family = "sans"))
+
+##libraries for color
+library(ggsci)
+library(wesanderson)
+#names(wes_palettes)
+library(colorBlindness)
+library(viridis)
+#dependent function
+library(here)
+source (here("src", "Develop_Function_posthoc_20230219.R"))
+```
+
+
+##### Figure 2D, Supp 2C, Supp 2D (Silhouette value)
+```{r}
+#result source
+load (here("output","2023-02-19_SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.RData"))
+```
+
+```{r, fig.width = 5, fig.asp = 0.5, echo=FALSE}
+plot_raw_boot_facet_sex ("silhs_mean_before_stat",
+                           y_breaks = c(1:6 * 0.2), 
+                           y_limits = c(0, 0.6), 
+                           legend_position = "right",
+                           title = "") 
+
+
+plot_raw_boot_facet_layer ("silhs_mean_before_stat",
+                           y_breaks = c(1:6 * 0.2), 
+                           y_limits = c(0, 0.6), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main_effect("silhs_mean_before_stat")
+report_inter_age_sex_layer("silhs_mean_before_stat")
+```
+
+
+##### Figure 2E and Figure Supp2E  (subnetwork #)
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_sex ("n_cls",
+                         y_breaks = c(1:6 * 3), 
+                         y_limits = c(0, 15),
+                         legend_position = "right",
+                         title = "")
+```
+
+```{r}
+report_main_effect("n_cls")
+report_inter_age_sex_layer("n_cls")
+```
+
+
+##### Figure 2F and Figure Supp2F (tetrachoric correlation-in the same subnetwork)
+```{r}
+#result source
+load (here("output","2024-01-11_SummaryDevAll_Kmean_CovM_Corr_in_outV2_20231204.RData"))
+```
+
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_sex ("in_r_mean",
+                         y_breaks = c(1:6 * 0.2), 
+                         y_limits = c(0.2, 1),
+                         legend_position = "right",
+                         title = "")
+```
+
+```{r}
+report_main_effect("in_r_mean")
+report_inter_age_sex_layer("in_r_mean")
+```
+
+
+##### Figure 3A and Figure Supp2G (single-cluster (%)) 
+```{r}
+#result source
+load (here("output","2023-02-19_SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.RData"))
+```
+
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_sex ("cells_in_one_assembly",
+                         y_breaks = c(1:6 * 20), 
+                         y_limits = c(0, 100),
+                         legend_position = "right",
+                         title = "")
+```
+
+```{r}
+report_main_effect("cells_in_one_assembly")
+report_inter_age_sex_layer("cells_in_one_assembly")
+```
+
+
+##### Figure 3B and Figure Supp2H (Non-cluster (%))
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_sex ("cells_not_in_assembly",
+                         y_breaks = c(1:6 * 20), 
+                         y_limits = c(0, 100),
+                         legend_position = "right",
+                         title = "")
+```
+
+```{r}
+report_main_effect("cells_not_in_assembly")
+report_inter_age_sex_layer("cells_not_in_assembly")
+```
+
+
+##### Figure 3C and Figure Supp2I (Multiple-cluster (%))
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_sex ("cells_in_many_assembly",
+                         y_breaks = c(1:6 * 20), 
+                         y_limits = c(0, 100),
+                         legend_position = "right",
+                         title = "")
+```
+
+```{r}
+report_main_effect("cells_in_many_assembly")
+report_inter_age_sex_layer("cells_in_many_assembly")
+```
+
+
+##### Figure 3E and Figure Supp 2J (Pairwise distances between neurons)
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_sex ("pw_neuron_neuron",
+                         y_breaks = c(1:6 * 100), 
+                         y_limits = c(0, 300),
+                         legend_position = "right",
+                         title = "")
+```
+
+```{r}
+report_main_effect("pw_neuron_neuron")
+report_inter_age_sex_layer("pw_neuron_neuron")
+```
+
+
+##### Figure 3F and Figure Supp 2K (Distance of neuron to subnetwork centroid)
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_sex ("neuron_centroid",
+                         y_breaks = c(1:6 * 50), 
+                         y_limits = c(0, 200),
+                         legend_position = "right",
+                         title = "")
+```
+
+```{r}
+report_main_effect("neuron_centroid")
+report_inter_age_sex_layer("neuron_centroid")
+```
+
+
+##### Figure 3G and Figure Supp 2L (Pairwise distances between centroids)
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_sex ("centroid_centroid",
+                         y_breaks = c(1:6 * 100), 
+                         y_limits = c(0, 300),
+                         legend_position = "right",
+                         title = "")
+```
+
+```{r}
+report_main_effect("centroid_centroid")
+report_inter_age_sex_layer("centroid_centroid")
+```
