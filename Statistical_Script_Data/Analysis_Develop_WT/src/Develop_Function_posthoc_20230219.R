@@ -73,7 +73,7 @@ plot_raw_boot_facet_layer = function(x, var_name = x, title = x,
   mod_data$tvar = mod_data$sex
   emm_plot = emmip(mod_boot, sex ~ f.age |f.layer, CIs = TRUE, 
                          CIarg = list(lwd = 1, alpha = 1), 
-                         dodge = 0.5,linewidth = 0.5) + 
+                         dodge = 0.5,linewidth = 0.5,fatten = 1) + 
     geom_beeswarm(data = mod_data, dodge.width = 0.5,alpha = 0.7,
                   shape = 1, size = 1) +
     scale_y_continuous(breaks = y_breaks, limits = y_limits) +
@@ -186,8 +186,15 @@ report_main_effect = function(x, var_name = x) {
   table1 = kable(anova,caption = "ANOVA table before bootstrapping", digits = 3)
   print(table1)
   
-  table2 = kable(list(emm_param_age, emm_param_sex, emm_param_layer), digits = 3)
+  table2 = kable(emm_param_age, caption ="Main effect after bootstrapping", digits = 3)
   print(table2)
+  
+  table3 = kable(emm_param_sex ,digits = 3)
+  print(table3)
+  
+  table4 = kable(emm_param_layer, digits = 3)
+  print(table4)
+  
 }
 
 
@@ -223,9 +230,16 @@ report_inter_age_sex_layer = function(x, var_name = x) {
   emm_param_layer$Median.1 = NULL
   
   # print formatted tables in sequence
-  table = kable (list(emm_param_age,emm_param_sex,emm_param_layer), digits = 3)
-  print(table)
+  table1 = kable (emm_param_age,
+                 caption = "Post-hoc comparison with bootstrapping output", digits = 3)
+  print(table1)
+  table2 = kable (emm_param_sex,digits = 3)
+  print(table2)
+  table3 = kable (emm_param_layer,digits = 3)
+  print(table3)
 }
+
+
 
 ## Merger layer, then plot raw data and bootstrapping ------------------
 
