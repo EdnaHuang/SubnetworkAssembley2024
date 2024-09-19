@@ -1,0 +1,151 @@
+---
+title: "Figure 3"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, comment = NA)
+
+freshr::freshr()
+library(dplyr)
+library(car)
+library(sjPlot)
+library(gridExtra)
+library(knitr)
+library(tidyverse)
+library(ggbeeswarm)
+library(ggthemes)
+library(emmeans)
+library(parameters)
+library(bayestestR)
+library(ggplot2)
+library(ggsci)
+library(tinytex)
+library(extrafont)
+#list the Fonts in windows
+#windowsFonts()
+#set-theme for figure
+theme_set (theme_classic(base_size = 10, base_family = "sans"))
+
+##libraries for color
+library(ggsci)
+library(wesanderson)
+#names(wes_palettes)
+library(colorBlindness)
+library(viridis)
+#dependent function
+library(here)
+source (here("src", "Develop_Function_posthoc_20240411.R"))
+```
+
+
+##### Figure 3A (single-cluster (%)) 
+```{r}
+#result source
+load (here("output","2023-02-19_SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.RData"))
+
+```
+
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_layer_2age("cells_in_one_assembly",
+                         y_breaks = seq(0,120, by=20), 
+                         y_limits = c(0, 100),
+                         legend_position = "right",
+                         title = "")
+ggsave("cells_in_one_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 2.8, units = "in")
+````
+
+
+```{r}
+report_main_effect("cells_in_one_assembly")
+report_inter_age_sex_layer("cells_in_one_assembly")
+
+```
+
+
+##### Figure 3B (Non-cluster (%))
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_layer_2age("cells_not_in_assembly",
+                         y_breaks = seq(0,120, by=20), 
+                         y_limits = c(0, 100),
+                         legend_position = "right",
+                         title = "")
+ggsave("cells_not_in_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 2.8, units = "in")
+````
+
+```{r}
+report_main_effect("cells_not_in_assembly")
+report_inter_age_sex_layer("cells_not_in_assembly")
+```
+
+
+##### Figure 3C (Multiple-cluster (%))
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_layer_2age("cells_in_many_assembly",
+                         y_breaks = seq(0,120, by=20), 
+                         y_limits = c(0, 100),
+                         legend_position = "right",
+                         title = "")
+ggsave("cells_in_many_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 2.8, units = "in")
+````
+
+```{r}
+report_main_effect("cells_in_many_assembly")
+report_inter_age_sex_layer("cells_in_many_assembly")
+```
+
+
+##### Figure 3E (Pairwise distances between neurons)
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_layer_2age("pw_neuron_neuron",
+                         y_breaks = seq(0,400, by=50), 
+                         y_limits = c(0, 250),
+                         legend_position = "right",
+                         title = "")
+ggsave("pw_neuron_neuron.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 2.8, units = "in")
+````
+
+```{r}
+report_main_effect("pw_neuron_neuron")
+report_inter_age_sex_layer("pw_neuron_neuron")
+```
+
+
+##### Figure 3F (Distance of neuron to subnetwork centroid)
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_layer_2age("neuron_centroid",
+                         y_breaks = seq(0,200, by=50), 
+                         y_limits = c(0, 200),
+                         legend_position = "right",
+                         title = "")
+ggsave("neuron_centroid.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 2.8, units = "in")
+````
+
+```{r}
+report_main_effect("neuron_centroid")
+report_inter_age_sex_layer("neuron_centroid")
+```
+
+
+##### Figure 3G (Pairwise distances between centroids)
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_layer_2age("centroid_centroid",
+                         y_breaks = seq(0,400, by=100), 
+                         y_limits = c(0, 400),
+                         legend_position = "right",
+                         title = "")
+ggsave("centroid_centroid.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 2.8, units = "in")
+````
+
+```{r}
+report_main_effect("centroid_centroid")
+report_inter_age_sex_layer("centroid_centroid")
+```

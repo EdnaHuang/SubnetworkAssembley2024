@@ -1,0 +1,244 @@
+---
+title: "Figure Supp8-additional clustering algorithm: subnetwork configuration and tCC in subnetwork"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE, warning = FALSE, comment = NA)
+
+freshr::freshr()
+library(readxl)
+library(janitor)
+library(dplyr)
+library(car)
+library(sjPlot)
+library(gridExtra)
+library(knitr)
+library(tidyverse)
+library(ggbeeswarm)
+library(ggthemes)
+library(emmeans)
+library(parameters)
+library(bayestestR)
+library(ggplot2)
+library(ggsci)
+library(tinytex)
+library(extrafont)
+library(ggpubr)
+#list the Fonts in windows
+#windowsFonts()
+#set-theme for figure
+theme_set (theme_classic(base_size = 10, base_family = "sans"))
+
+##libraries for color
+library(ggsci)
+library(wesanderson)
+#names(wes_palettes)
+library(colorBlindness)
+library(viridis)
+#dependent function
+library(here)
+source (here("src", "Develop_Function_posthoc_20240411.R"))
+```
+
+```{r,echo = FALSE}
+#Figure plotting function
+plot_raw = function(var, data = df_lite, title = var,
+                    y_breaks = c(1:6 * 0.5), 
+                    y_limits = c(0, 2), 
+                    legend_position = c(0.4, 0.5)) {
+df_lite %>%
+   select(f.age, sex, f.layer, var) %>%
+   tidyr::unite("group", sex:f.layer, sep = "-", remove = FALSE) %>%
+   ggplot(aes(x = f.age, y = get(var), color = group, group = group)) + 
+   #ggbeeswarm::geom_beeswarm(dodge.width = 0.4, alpha = 0.3) +
+   stat_summary(fun = "mean", geom = "line", linewidth = 0.4,
+                position = position_dodge(width = 0.4)) +
+   stat_summary(fun.data = "mean_cl_boot", size = 0.02, linewidth = 0.4, 
+                 position = position_dodge(width = 0.4)) +
+   ggtitle(title) +
+   scale_y_continuous(breaks = y_breaks, limits = y_limits) +
+   labs(x = "", y = "") + 
+   theme( legend.text = element_text(color = "black", size  = "8"),
+          legend.position = legend_position,
+          legend.title = element_blank(),
+          axis.text.x = element_text(color = "black", size = "8"),
+          axis.line.x.bottom = element_line (linewidth = 1/4),
+          axis.text.y = element_text(color = "black", size = "8"),
+          axis.line.y = element_line(linewidth = 1/4), 
+          axis.ticks.x = element_blank(),
+          plot.background = element_blank(),
+          plot.margin = unit(c(0,-0.15,0,0), 'cm')) + 
+    ggsci::scale_color_locuszoom() -> p
+return(p)
+  
+}
+```
+
+
+### Figure Supp 8A - Kmean_CovM
+```{r}
+load (here("output","2023-02-19_SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.RData"))
+```
+
+```{r}
+a <-plot_raw("cells_in_one_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none", title = "Single-cluster (%)")
+
+b <-plot_raw("cells_not_in_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none",title = "Non-cluster (%)")
+
+c <-plot_raw("cells_in_many_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none", title = "Single-cluster (%)")
+
+d <-plot_raw("cluster_r_all_mean",
+         y_breaks = c(1:6 * 0.2), y_limits = c(0, 1),
+                legend_position = "",title = "tCC in subnetwork")
+
+```
+
+```{r,fig.width = 8, fig.asp = 0.3, echo=FALSE}
+ggarrange(a,b,c,d,
+          ncol = 4, nrow = 1)
+```
+
+##### Figure Supp 8A - Kmean_CovM - Single-cluster
+```{r}
+report_main_effect("cells_in_one_assembly")
+report_inter_age_sex_layer("cells_in_one_assembly")
+```
+
+##### Figure Supp 8A - Kmean_CovM - Non-cluster
+```{r}
+report_main_effect("cells_not_in_assembly")
+report_inter_age_sex_layer("cells_not_in_assembly")
+```
+
+##### Figure Supp 8A - Kmean_CovM - Multiple-cluster
+```{r}
+report_main_effect("cells_in_many_assembly")
+report_inter_age_sex_layer("cells_in_many_assembly")
+```
+
+##### Figure Supp 8A - Kmean_CovM - tCC in subnetwork
+```{r}
+report_main_effect("cluster_r_all_mean")
+report_inter_age_sex_layer("cluster_r_all_mean")
+```
+
+
+### Figure Supp 8B - Community detection-uniform_CovM
+```{r}
+load (here("output","2023-02-19_SummaryDevAll_CommDetecUni_CovM_withCorrl_20230113.RData"))
+```
+
+```{r}
+n <-plot_raw("cells_in_one_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none", title = "Single-cluster (%)")
+
+o <-plot_raw("cells_not_in_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none",title = "Non-cluster (%)")
+
+p <-plot_raw("cells_in_many_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none", title = "Single-cluster (%)")
+
+q <-plot_raw("cluster_r_all_mean",
+         y_breaks = c(1:6 * 0.2), y_limits = c(0, 1),
+                legend_position = "none",title = "tCC in subnetwork")
+
+```
+
+```{r,fig.width = 8, fig.asp = 0.3, echo=FALSE}
+ggarrange(n,o,p,q,
+          ncol = 4, nrow = 1)
+```
+
+
+##### Figure Supp 8B - Community detection-uniform - Single-cluster
+```{r}
+report_main_effect("cells_in_one_assembly")
+report_inter_age_sex_layer("cells_in_one_assembly")
+```
+
+##### Figure Supp 8B - Community detection-uniform- Non-cluster
+```{r}
+report_main_effect("cells_not_in_assembly")
+report_inter_age_sex_layer("cells_not_in_assembly")
+```
+
+##### Figure Supp 8B - Community detection-uniform- Multiple-cluster
+```{r}
+report_main_effect("cells_in_many_assembly")
+report_inter_age_sex_layer("cells_in_many_assembly")
+```
+
+##### Figure Supp 8B - Community detection-uniform- tCC in subnetwork
+```{r}
+report_main_effect("cluster_r_all_mean")
+report_inter_age_sex_layer("cluster_r_all_mean")
+```
+
+
+
+### Figure Supp 8C - Community detection-Asymmetric_CovM
+```{r}
+load (here("output","2023-02-19_SummaryDevAll_CommDetecAsy_CovM_withCorr_20230113.RData"))
+```
+
+```{r}
+r <-plot_raw("cells_in_one_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none", title = "Single-cluster (%)")
+
+s <-plot_raw("cells_not_in_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none",title = "Non-cluster (%)")
+
+t <-plot_raw("cells_in_many_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none", title = "Single-cluster (%)")
+
+u <-plot_raw("cluster_r_all_mean",
+         y_breaks = c(1:6 * 0.2), y_limits = c(0, 1),
+                legend_position = "none",title = "tCC in subnetwork")
+
+```
+
+```{r,fig.width = 8, fig.asp = 0.3, echo=FALSE}
+ggarrange(r,s,t,u,
+          ncol = 4, nrow = 1)
+```
+
+
+##### Figure Supp 8C - Community detection-Asymmetric_CovM - Single-cluster
+```{r}
+report_main_effect("cells_in_one_assembly")
+report_inter_age_sex_layer("cells_in_one_assembly")
+```
+
+##### Figure Supp 8C - Community detection-Asymmetric_CovM - Non-cluster
+```{r}
+report_main_effect("cells_not_in_assembly")
+report_inter_age_sex_layer("cells_not_in_assembly")
+```
+
+##### Figure Supp 8C - Community detection-Asymmetric_CovM - Multiple-cluster
+```{r}
+report_main_effect("cells_in_many_assembly")
+report_inter_age_sex_layer("cells_in_many_assembly")
+```
+
+##### Figure Supp 8C - Community detection-Asymmetric_CovM - tCC in subnetwork
+```{r}
+report_main_effect("cluster_r_all_mean")
+report_inter_age_sex_layer("cluster_r_all_mean")
+```
+

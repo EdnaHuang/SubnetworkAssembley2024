@@ -1,0 +1,264 @@
+---
+title: "Figure 5 and Figure Supp6"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, comment = "")
+
+freshr::freshr()
+library(dplyr)
+library(car)
+library(sjPlot)
+library(gridExtra)
+library(knitr)
+library(tidyverse)
+library(ggbeeswarm)
+library(ggthemes)
+library(emmeans)
+library(parameters)
+library(bayestestR)
+library(ggplot2)
+library(ggsci)
+library(tinytex)
+library(extrafont)
+library(ggpubr)
+library(patchwork)
+library(cowplot)
+#list the Fonts in windows
+#windowsFonts()
+#set-theme for figure
+theme_set (theme_classic(base_size = 10, base_family = "sans"))
+
+##libraries for color
+library(ggsci)
+library(wesanderson)
+#names(wes_palettes)
+library(colorBlindness)
+library(viridis)
+#dependent function
+library(here)
+source (here("src", "WT_Dlx_GsDREADD_Function_posthoc_20240503.R"))
+```
+
+
+```{r}
+#result source
+load (here("output","2023-02-17_Caseboot_SummaryWT_Dlx_GsDREADD_basicPara_20230113.RData"))
+```
+
+##### Figure 5C (Event frequency)
+```{r, fig.width = 2, fig.asp = 1.5, echo=FALSE}
+plot_raw_boot_facet_layer ("event_freq",
+                           y_breaks = seq(0,6, by = 1), 
+                           y_limits = c(0, 3), 
+                           legend_position = "right",
+                           title = "")
+
+ggsave("CNO_event_freq.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 3.5, units = "in")
+
+```
+
+```{r}
+report_main("event_freq")
+report_all_interaction_simple("event_freq", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+##### Figure 5D (Synchrony frequency)
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot_facet_layer ("synchrony_freq",
+                           y_breaks = c(1:6 * 1), 
+                           y_limits = c(0, 4), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main("synchrony_freq")
+report_all_interaction_simple("synchrony_freq", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+
+##### Figure 5E (Silhouette value)
+```{r}
+load (here("output","2023-02-17_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_20230113.RData"))
+```
+
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot_facet_layer ("silhs_mean_before_stat",
+                           y_breaks = c(1:6 * 0.2), 
+                           y_limits = c(0, 0.6), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main("silhs_mean_before_stat")
+report_all_interaction_simple("silhs_mean_before_stat", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+##### Figure 5F (Single-cluster (%))
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot_facet_layer ("cells_in_one_assembly",
+                           y_breaks = c(1:6 * 20), 
+                           y_limits = c(0, 100), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main("cells_in_one_assembly")
+report_all_interaction_simple("cells_in_one_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+##### Figure 5G (Non-cluster (%))
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot_facet_layer ("cells_not_in_assembly",
+                           y_breaks = c(1:6 * 20), 
+                           y_limits = c(0, 100), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main("cells_not_in_assembly")
+report_all_interaction_simple("cells_not_in_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+##### Figure 5H (Multiple-cluster (%))
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot_facet_layer ("cells_in_many_assembly",
+                           y_breaks = c(1:6 * 20), 
+                           y_limits = c(0, 100), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main("cells_in_many_assembly")
+report_all_interaction_simple("cells_in_many_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+
+##### Figure supp6A (Pearson Correlation- all pairs)
+```{r}
+#result source
+load (here("output","2023-12-06_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_Corr_in_outV2.RData"))
+```
+
+
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot_facet_layer ("zf_r_allpair_mean",
+                           y_breaks = c(1:6 * 0.2), 
+                           y_limits = c(0, 1), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main("zf_r_allpair_mean")
+report_all_interaction_simple("zf_r_allpair_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+```{r}
+load (here("output","2023-02-17_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_20230113.RData"))
+```
+
+
+##### Figure supp6B (Subnetwork number)
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot_facet_layer ("n_cls",
+                           y_breaks = c(1:6 * 5), 
+                           y_limits = c(0, 15), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main("n_cls")
+report_all_interaction_simple("n_cls", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+```{r}
+#result source
+load (here("output","2023-12-06_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_Corr_in_outV2.RData"))
+```
+
+
+##### Figure supp6C (tCC - in the same subnetwork)
+
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot ("in_r_mean",
+                y_breaks = seq(0, 6, by = 0.2), 
+                y_limits = c(0.2, 1), 
+                legend_position = "right",
+                  title = "") 
+```
+
+```{r}
+report_main("in_r_mean")
+report_all_interaction_simple("in_r_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+```{r}
+load (here("output","2023-02-17_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_20230113.RData"))
+```
+
+
+##### Figure supp6D (Pairwise distances between neurons)
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot_facet_layer ("pw_neuron_neuron",
+                           y_breaks = c(1:6 * 50), 
+                           y_limits = c(0, 250), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main("pw_neuron_neuron")
+report_all_interaction_simple("pw_neuron_neuron", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+##### Figure supp6E (Distance of neuron to subnetwork centroid)
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot_facet_layer ("neuron_centroid",
+                           y_breaks = c(1:6 * 50), 
+                           y_limits = c(0, 200), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main("neuron_centroid")
+report_all_interaction_simple("neuron_centroid", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+
+##### Figure supp6F (Pairwise distances between subnetwork centroids)
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+plot_raw_boot_facet_layer ("centroid_centroid",
+                           y_breaks = c(1:6 * 100), 
+                           y_limits = c(0, 400), 
+                           legend_position = "right",
+                           title = "") 
+```
+
+```{r}
+report_main("centroid_centroid")
+report_all_interaction_simple("centroid_centroid", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
+```
+
+
+
