@@ -25,7 +25,7 @@ library(ggsci)
 library(tinytex)
 library(extrafont)
 library(ggpubr)
-library(patchwork)
+#library(gridExtra)
 library(cowplot)
 #list the Fonts in windows
 #windowsFonts()
@@ -44,12 +44,13 @@ source (here("src", "WT_Dlx_GsDREADD_Function_posthoc_20240503.R"))
 ```
 
 
-```{r}
-#result source
-load (here("output","2023-02-17_Caseboot_SummaryWT_Dlx_GsDREADD_basicPara_20230113.RData"))
-```
 
 ##### Figure 5C (Event frequency)
+```{r}
+#result source
+load (here("output","Kmean_CovM_SummaryWT_Dlx_GsDREADD_basicPara.RData"))
+```
+
 ```{r, fig.width = 2, fig.asp = 1.5, echo=FALSE}
 plot_raw_boot_facet_layer ("event_freq",
                            y_breaks = seq(0,6, by = 1), 
@@ -68,13 +69,17 @@ report_all_interaction_simple("event_freq", var_int1 = "p15_cno", var_int2 = "se
 ```
 
 
+
 ##### Figure 5D (Synchrony frequency)
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
 plot_raw_boot_facet_layer ("synchrony_freq",
-                           y_breaks = c(1:6 * 1), 
+                           y_breaks =seq(0,6, by= 1), 
                            y_limits = c(0, 4), 
                            legend_position = "right",
-                           title = "") 
+                           title = "")
+
+ggsave("CNO_sync_freq.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 3.5, units = "in")
 ```
 
 ```{r}
@@ -86,15 +91,18 @@ report_all_interaction_simple("synchrony_freq", var_int1 = "p15_cno", var_int2 =
 
 ##### Figure 5E (Silhouette value)
 ```{r}
-load (here("output","2023-02-17_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_20230113.RData"))
+load (here("output", "Kmean_CovM_SummaryWT_Dlx_GsDREADD.RData"))
 ```
 
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
 plot_raw_boot_facet_layer ("silhs_mean_before_stat",
-                           y_breaks = c(1:6 * 0.2), 
+                           y_breaks = seq(0,6, by = 0.2), 
                            y_limits = c(0, 0.6), 
                            legend_position = "right",
-                           title = "") 
+                           title = "")
+ggsave("silh.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 3.5, units = "in")
+
 ```
 
 ```{r}
@@ -106,10 +114,14 @@ report_all_interaction_simple("silhs_mean_before_stat", var_int1 = "p15_cno", va
 ##### Figure 5F (Single-cluster (%))
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
 plot_raw_boot_facet_layer ("cells_in_one_assembly",
-                           y_breaks = c(1:6 * 20), 
+                           y_breaks = seq(0,120, by= 20), 
                            y_limits = c(0, 100), 
                            legend_position = "right",
                            title = "") 
+
+ggsave("cells_in_one_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 3.5, units = "in")
+
 ```
 
 ```{r}
@@ -117,13 +129,19 @@ report_main("cells_in_one_assembly")
 report_all_interaction_simple("cells_in_one_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
 ```
 
+
+
 ##### Figure 5G (Non-cluster (%))
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
 plot_raw_boot_facet_layer ("cells_not_in_assembly",
-                           y_breaks = c(1:6 * 20), 
+                           y_breaks = seq(0,120, by=20), 
                            y_limits = c(0, 100), 
                            legend_position = "right",
-                           title = "") 
+                           title = "")
+
+ggsave("cells_not_in_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 3.5, units = "in")
+
 ```
 
 ```{r}
@@ -131,13 +149,19 @@ report_main("cells_not_in_assembly")
 report_all_interaction_simple("cells_not_in_assembly", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
 ```
 
+
+
 ##### Figure 5H (Multiple-cluster (%))
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
 plot_raw_boot_facet_layer ("cells_in_many_assembly",
-                           y_breaks = c(1:6 * 20), 
+                           y_breaks = seq(0, 120, by= 20), 
                            y_limits = c(0, 100), 
                            legend_position = "right",
                            title = "") 
+
+ggsave("cells_in_many_assembly.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 3.5, units = "in")
+
 ```
 
 ```{r}
@@ -148,18 +172,17 @@ report_all_interaction_simple("cells_in_many_assembly", var_int1 = "p15_cno", va
 
 
 ##### Figure supp6A (Pearson Correlation- all pairs)
-```{r}
-#result source
-load (here("output","2023-12-06_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_Corr_in_outV2.RData"))
-```
-
-
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
-plot_raw_boot_facet_layer ("zf_r_allpair_mean",
-                           y_breaks = c(1:6 * 0.2), 
-                           y_limits = c(0, 1), 
-                           legend_position = "right",
-                           title = "") 
+ a <- plot_raw_boot_facet_layer ("zf_r_allpair_mean",
+                           y_breaks = seq(0, 6, by= 0.2), 
+                           y_limits = c(0.2, 1), 
+                           legend_position = "",
+                           title = "")
+a
+
+ggsave("pearson.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 3, units = "in")
+
 ```
 
 ```{r}
@@ -168,18 +191,48 @@ report_all_interaction_simple("zf_r_allpair_mean", var_int1 = "p15_cno", var_int
 ```
 
 
+
+##### Figure supp6B (MI Correlation- all pairs)
 ```{r}
-load (here("output","2023-02-17_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_20230113.RData"))
+#result source
+load (file = here("output","SummaryWT_Dlx_GsDREADD_kmean_CovM_MI_Corr.RData"))
+```
+
+```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
+b <- plot_raw_boot_facet_layer ("zf_r_allpair_mean",
+                           y_breaks = seq(0,6, by= 0.2), 
+                           y_limits = c(0, 1), 
+                           legend_position = "none",
+                           title = "")
+b
+
+ggsave("MI.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 3, units = "in")
+```
+
+```{r}
+report_main("zf_r_allpair_mean")
+report_all_interaction_simple("zf_r_allpair_mean", var_int1 = "p15_cno", var_int2 = "sex", var_int3 = "f.layer")
 ```
 
 
-##### Figure supp6B (Subnetwork number)
+
+##### Figure supp6C (Subnetwork number)
+```{r}
+load (here("output","Kmean_CovM_SummaryWT_Dlx_GsDREADD.RData"))
+```
+
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
-plot_raw_boot_facet_layer ("n_cls",
-                           y_breaks = c(1:6 * 5), 
-                           y_limits = c(0, 15), 
-                           legend_position = "right",
-                           title = "") 
+c <-plot_raw_boot_facet_layer ("n_cls",
+                           y_breaks = seq(0,100, by=3), 
+                           y_limits = c(0, 12), 
+                           legend_position = "",
+                           title = "")
+c
+
+ggsave("ncls.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 3, units = "in")
+
 ```
 
 ```{r}
@@ -188,20 +241,19 @@ report_all_interaction_simple("n_cls", var_int1 = "p15_cno", var_int2 = "sex", v
 ```
 
 
-```{r}
-#result source
-load (here("output","2023-12-06_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_Corr_in_outV2.RData"))
-```
 
-
-##### Figure supp6C (tCC - in the same subnetwork)
-
+##### Figure supp6D (tCC - in the same subnetwork)
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
-plot_raw_boot ("in_r_mean",
+d <-plot_raw_boot ("in_r_mean",
                 y_breaks = seq(0, 6, by = 0.2), 
                 y_limits = c(0.2, 1), 
-                legend_position = "right",
-                  title = "") 
+                legend_position = "",
+                  title = "")
+d
+
+ggsave("in_r_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 4, height = 3, units = "in")
+
 ```
 
 ```{r}
@@ -210,18 +262,20 @@ report_all_interaction_simple("in_r_mean", var_int1 = "p15_cno", var_int2 = "sex
 ```
 
 
-```{r}
-load (here("output","2023-02-17_Caseboot_SummaryWT_Dlx_GsDREADD_kmean_CovM_20230113.RData"))
-```
-
 
 ##### Figure supp6D (Pairwise distances between neurons)
+
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
-plot_raw_boot_facet_layer ("pw_neuron_neuron",
-                           y_breaks = c(1:6 * 50), 
+e<-plot_raw_boot_facet_layer ("pw_neuron_neuron",
+                           y_breaks = seq(0,500, by=50), 
                            y_limits = c(0, 250), 
-                           legend_position = "right",
-                           title = "") 
+                           legend_position = "",
+                           title = "")
+e
+
+ggsave("pw_neuron_neuron.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 3, units = "in")
+
 ```
 
 ```{r}
@@ -232,11 +286,15 @@ report_all_interaction_simple("pw_neuron_neuron", var_int1 = "p15_cno", var_int2
 
 ##### Figure supp6E (Distance of neuron to subnetwork centroid)
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
-plot_raw_boot_facet_layer ("neuron_centroid",
-                           y_breaks = c(1:6 * 50), 
+f <-plot_raw_boot_facet_layer ("neuron_centroid",
+                           y_breaks = seq(0, 500, by=50), 
                            y_limits = c(0, 200), 
-                           legend_position = "right",
-                           title = "") 
+                           legend_position = "",
+                           title = "")
+f
+ggsave("neuron_centroid.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 3.5, units = "in")
+
 ```
 
 ```{r}
@@ -246,13 +304,17 @@ report_all_interaction_simple("neuron_centroid", var_int1 = "p15_cno", var_int2 
 
 
 
-##### Figure supp6F (Pairwise distances between subnetwork centroids)
+##### Figure supp6G (Pairwise distances between subnetwork centroids)
 ```{r, fig.width = 4, fig.asp = 1, echo=FALSE}
-plot_raw_boot_facet_layer ("centroid_centroid",
-                           y_breaks = c(1:6 * 100), 
+g<-plot_raw_boot_facet_layer ("centroid_centroid",
+                           y_breaks = seq(0,500, by= 100), 
                            y_limits = c(0, 400), 
-                           legend_position = "right",
-                           title = "") 
+                           legend_position = "",
+                           title = "")
+g
+ggsave("cetroid_centroid.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2, height = 3, units = "in")
+
 ```
 
 ```{r}
@@ -261,4 +323,17 @@ report_all_interaction_simple("centroid_centroid", var_int1 = "p15_cno", var_int
 ```
 
 
+##### assemble figure
+```{r, fig.width = 7, fig.asp = 0.8, echo=FALSE}
+top_row <- plot_grid(a, b, d, nrow = 1, rel_widths = c(1, 1, 2))  # First row
+bottom_row <- plot_grid(c, e, f, g, nrow = 1)  # Second row
 
+final_plot <- plot_grid(top_row, bottom_row, ncol = 1, rel_heights = c(1, 1))  # Combine rows
+
+# Display the final plot
+final_plot
+
+ggsave("Figure_S6.svg", plot = last_plot(), path =here("output_plot"),
+       width = 7, height = 6, units = "in")
+
+```

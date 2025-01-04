@@ -80,7 +80,7 @@ return(p)
 
 ### Figure Supp 8A - Kmean_CovM
 ```{r}
-load (here("output","2023-02-19_SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.RData"))
+load (here("output","SummaryDevAll_Kmean_CovM_withCorrDistArea.RData"))
 ```
 
 ```{r}
@@ -94,9 +94,9 @@ b <-plot_raw("cells_not_in_assembly",
 
 c <-plot_raw("cells_in_many_assembly",
          y_breaks = c(1:10 * 20), y_limits = c(0, 80),
-        legend_position = "none", title = "Single-cluster (%)")
+        legend_position = "none", title = "Multiple-cluster (%)")
 
-d <-plot_raw("cluster_r_all_mean",
+d <-plot_raw("in_r_mean",
          y_breaks = c(1:6 * 0.2), y_limits = c(0, 1),
                 legend_position = "",title = "tCC in subnetwork")
 
@@ -127,37 +127,37 @@ report_inter_age_sex_layer("cells_in_many_assembly")
 
 ##### Figure Supp 8A - Kmean_CovM - tCC in subnetwork
 ```{r}
-report_main_effect("cluster_r_all_mean")
-report_inter_age_sex_layer("cluster_r_all_mean")
+report_main_effect("in_r_mean")
+report_inter_age_sex_layer("in_r_mean")
 ```
 
 
 ### Figure Supp 8B - Community detection-uniform_CovM
 ```{r}
-load (here("output","2023-02-19_SummaryDevAll_CommDetecUni_CovM_withCorrl_20230113.RData"))
+load (here("output","SummaryDevAll_CommUni_CovM_withCorrDistArea.RData"))
 ```
 
 ```{r}
-n <-plot_raw("cells_in_one_assembly",
+e <-plot_raw("cells_in_one_assembly",
          y_breaks = c(1:10 * 20), y_limits = c(0, 80),
         legend_position = "none", title = "Single-cluster (%)")
 
-o <-plot_raw("cells_not_in_assembly",
+f <-plot_raw("cells_not_in_assembly",
          y_breaks = c(1:10 * 20), y_limits = c(0, 80),
         legend_position = "none",title = "Non-cluster (%)")
 
-p <-plot_raw("cells_in_many_assembly",
+g <-plot_raw("cells_in_many_assembly",
          y_breaks = c(1:10 * 20), y_limits = c(0, 80),
-        legend_position = "none", title = "Single-cluster (%)")
+        legend_position = "none", title = "Multiple-cluster (%)")
 
-q <-plot_raw("cluster_r_all_mean",
+h <-plot_raw("in_r_mean",
          y_breaks = c(1:6 * 0.2), y_limits = c(0, 1),
                 legend_position = "none",title = "tCC in subnetwork")
 
 ```
 
 ```{r,fig.width = 8, fig.asp = 0.3, echo=FALSE}
-ggarrange(n,o,p,q,
+ggarrange(e,f,g,h,
           ncol = 4, nrow = 1)
 ```
 
@@ -182,38 +182,38 @@ report_inter_age_sex_layer("cells_in_many_assembly")
 
 ##### Figure Supp 8B - Community detection-uniform- tCC in subnetwork
 ```{r}
-report_main_effect("cluster_r_all_mean")
-report_inter_age_sex_layer("cluster_r_all_mean")
+report_main_effect("in_r_mean")
+report_inter_age_sex_layer("in_r_mean")
 ```
 
 
 
 ### Figure Supp 8C - Community detection-Asymmetric_CovM
 ```{r}
-load (here("output","2023-02-19_SummaryDevAll_CommDetecAsy_CovM_withCorr_20230113.RData"))
+load (here("output","SummaryDevAll_CommDetectAsy_CovM_withCorrDistArea.RData"))
 ```
 
 ```{r}
-r <-plot_raw("cells_in_one_assembly",
+i <-plot_raw("cells_in_one_assembly",
          y_breaks = c(1:10 * 20), y_limits = c(0, 80),
         legend_position = "none", title = "Single-cluster (%)")
 
-s <-plot_raw("cells_not_in_assembly",
+j <-plot_raw("cells_not_in_assembly",
          y_breaks = c(1:10 * 20), y_limits = c(0, 80),
         legend_position = "none",title = "Non-cluster (%)")
 
-t <-plot_raw("cells_in_many_assembly",
+k <-plot_raw("cells_in_many_assembly",
          y_breaks = c(1:10 * 20), y_limits = c(0, 80),
-        legend_position = "none", title = "Single-cluster (%)")
+        legend_position = "none", title = "Multiple-cluster (%)")
 
-u <-plot_raw("cluster_r_all_mean",
+l <-plot_raw("in_r_mean",
          y_breaks = c(1:6 * 0.2), y_limits = c(0, 1),
                 legend_position = "none",title = "tCC in subnetwork")
 
 ```
 
 ```{r,fig.width = 8, fig.asp = 0.3, echo=FALSE}
-ggarrange(r,s,t,u,
+ggarrange(i,j,k,l,
           ncol = 4, nrow = 1)
 ```
 
@@ -238,7 +238,133 @@ report_inter_age_sex_layer("cells_in_many_assembly")
 
 ##### Figure Supp 8C - Community detection-Asymmetric_CovM - tCC in subnetwork
 ```{r}
-report_main_effect("cluster_r_all_mean")
-report_inter_age_sex_layer("cluster_r_all_mean")
+report_main_effect("in_r_mean")
+report_inter_age_sex_layer("in_r_mean")
 ```
 
+
+
+### Figure Supp 8D - DBSCAN_CovM
+```{r}
+load (here("output","SummaryDevAll_DBSCAN_CovM_withCorrDistArea.RData"))
+```
+
+```{r}
+m <-plot_raw("cells_in_one_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none", title = "Single-cluster (%)")
+
+n <-plot_raw("cells_not_in_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none",title = "Non-cluster (%)")
+
+o <-plot_raw("cells_in_many_assembly",
+         y_breaks = c(1:10 * 20), y_limits = c(0, 80),
+        legend_position = "none", title = "Multiple-cluster (%)")
+
+p <-plot_raw("in_r_mean",
+         y_breaks = c(1:6 * 0.2), y_limits = c(0, 1),
+         legend_position = "none",title = "tCC in subnetwork")
+
+```
+
+```{r,fig.width = 8, fig.asp = 0.3, echo=FALSE}
+ggarrange(m,n,o,p,
+          ncol = 4, nrow = 1)
+```
+
+
+##### Figure Supp 8D - DBSCAN_CovM - Single-cluster
+```{r}
+report_main_effect("cells_in_one_assembly")
+report_inter_age_sex_layer("cells_in_one_assembly")
+```
+
+##### Figure Supp 8D - DBSCAN_CovM - Non-cluster
+```{r}
+report_main_effect("cells_not_in_assembly")
+report_inter_age_sex_layer("cells_not_in_assembly")
+```
+
+##### Figure Supp 8D - DBSCAN_CovM - Multiple-cluster
+```{r}
+report_main_effect("cells_in_many_assembly")
+report_inter_age_sex_layer("cells_in_many_assembly")
+```
+
+##### Figure Supp 8D - DBSCAN_CovM - tCC in subnetwork
+```{r}
+report_main_effect("in_r_mean")
+report_inter_age_sex_layer("in_r_mean")
+```
+
+
+```{r,fig.width = 8, fig.asp = 1, echo=FALSE}
+ggarrange(a,b,c,d,
+          e,f,g,h,
+          i,j,k,l,
+          m,n,o,p,
+          ncol = 4, nrow = 4)
+
+ggsave("SupFig8.svg", plot = last_plot(), path =here("output_plot"),
+       width = 7, height = 6, units = "in")
+
+```
+
+##### Figure Supp 8E - compare methods-- Event cluster # vs subnetwork #
+```{r}
+# import data
+df_plot_pre = read_xlsx(
+  here("data", "CompareAllMethod.xlsx"),
+  sheet = "Sheet1")
+
+# check column names
+df_plot_pre = clean_names(df_plot_pre)
+
+
+df_plot_pre <- df_plot_pre %>%
+  rename(MethodName = method)
+#variablenames = names(df_plot_pre)
+
+# overview of the variables
+#skimr::skim(df_plot_pre, c(all_of(variablenames)))
+
+df_plot <- df_plot_pre %>%
+  mutate(MethodName = gsub("CommDetectUni", "Uni", MethodName))%>%
+  mutate(MethodName = gsub("CommDetectAsy", "Asy", MethodName))%>%
+  mutate(f.MethodName = factor(MethodName, levels = c("Kmean", "Uni", "Asy","DBSCAN")))%>%
+  mutate(f.age = factor(age))
+
+# density estimates of response variables
+#lapply(rv_list, function(x) with(df_lite, densityPlot(get(x), xlab = x)))
+
+```
+
+```{r,fig.width = 7, fig.asp = 0.3, echo=FALSE}
+
+# define label
+  age.label = c("P11", "P13", "P15", "P18", "P21")
+  names(age.label) = c("11", "13", "15", "18", "21")
+
+  # Creating the scatter plot with a trend line
+ggplot(df_plot, aes(x = n_cls, y = n_cls_before_stat)) +
+      geom_point(aes(color = f.MethodName),shape = 1) +  # Scatter plot
+      ggsci::scale_color_locuszoom() +  # Outline color palette 
+      #geom_smooth(method = "lm", se = FALSE, color = "blue") + # Trend line (linear model)
+      #stat_cor(method = "spearman", label.x = 3, label.y = 70, size = 2) +  # Add correlation coefficient
+      labs(x = "Subnetwork #", y = "Event cluster #") +
+      facet_wrap(~ f.age, nrow = 1, ncol = 5,
+                 strip.position = "top",labeller = labeller(f.age = age.label),
+                 scales = "free_y") +
+      scale_x_continuous(breaks = seq(0, 200, by =5), limits = c(0, 15)) +
+      scale_y_continuous(breaks = seq(0, 200, by =30), limits = c(0, 90))+
+      theme(
+        legend.position = "",
+        axis.line.x = element_line(linewidth = 1/4),
+        axis.line.y = element_line(linewidth = 1/4),
+        strip.background = element_rect(color = "black",linewidth = 0.5))
+ggsave("ncl-cluster_corr_fig.svg", plot = last_plot(), path =here("output_plot"),
+       
+       width = 7.7, height = 2.5, units = "in")
+
+```

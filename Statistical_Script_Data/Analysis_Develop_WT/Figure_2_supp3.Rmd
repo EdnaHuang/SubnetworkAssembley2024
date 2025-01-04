@@ -47,7 +47,7 @@ source (here("src", "Develop_Function_posthoc_20240411.R"))
 ##### Figure 2D (Silhouette value)
 ```{r}
 #result source
-load (here("output","2023-02-19_SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.RData"))
+load (here("output","SummaryDevAll_Kmean_CovM_withCorrDistArea.RData"))
 ```
 
 ```{r, fig.width = 3, fig.asp = 0.75, echo=FALSE}
@@ -87,10 +87,6 @@ report_inter_age_sex_layer("n_cls")
 
 
 ### Figure Supp 3C- tCC in- and out- subnetwork
-```{r}
-#result source
-load (here("output","2024-01-11_SummaryDevAll_Kmean_CovM_Corr_in_outV2_20231204.RData"))
-```
 
 ```{r,fig.width = 8, fig.asp =0.4, echo=FALSE}
 
@@ -166,7 +162,7 @@ report_inter_age_sex_layer("in_r_mean")
 ```{r}
 #import data
 df = read_xlsx(
-  here("data", "SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.xlsx"),
+  here("data", "Kmean_CovM_neuronN_time.xlsx"),
   sheet = "ForMultilevel")
 
 # check column names

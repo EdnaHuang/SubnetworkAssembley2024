@@ -45,14 +45,14 @@ source (here("src", "Develop_Function_posthoc_20240411.R"))
 ##### Figure 1D (Event frequency)
 ```{r}
 #result source
-load (here("output","2023-02-19_SummaryDevAll_basicParameter_MeanVersion_withCorr_20230113.RData"))
+load (here("output","SummaryDevAll_basicParameter.RData"))
 ```
 
 ```{r, fig.width = 3, fig.asp = 0.75, echo=FALSE}
 plot_raw_boot_facet_layer_2age ("event_freq",
                            y_breaks = seq(0, 6 , by=1),
                            y_limits = c(0, 3), 
-                           legend_position = "",
+                           legend_position = "right",
                            title = "")
 ggsave("event_freq.svg", plot = last_plot(), path =here("output_plot"),
        width = 2.4, height = 2.6, units = "in")
@@ -69,7 +69,7 @@ report_inter_age_sex_layer("event_freq")
 plot_raw_boot_facet_layer_2age ("synchrony_freq",
                            y_breaks = seq (0,6, by= 1), 
                            y_limits = c(0, 4), 
-                           legend_position = "",
+                           legend_position = "right",
                            title = "")
 ggsave("sync_freq.svg", plot = last_plot(), path =here("output_plot"),
        width = 2.4, height = 2.6, units = "in")
@@ -84,7 +84,7 @@ report_inter_age_sex_layer("synchrony_freq")
 ##### Figure Supp2F (Pearson correlation coefficient)
 ```{r}
 #result source
-load (here("output","2024-01-11_SummaryDevAll_Kmean_CovM_Corr_in_outV2_20231204.RData"))
+load (here("output","SummaryDevAll_Kmean_CovM_withCorrDistArea.RData"))
 ```
 
 ```{r, fig.width = 3, fig.asp = 0.75, echo=FALSE}
@@ -94,11 +94,33 @@ plot_raw_boot_facet_layer_2age ("zf_r_allpair_mean",
                            legend_position = "",
                            title = "")
 ggsave("zf_r_allpair_mean2age.svg", plot = last_plot(), path =here("output_plot"),
-       width = 4, height = 3.5, units = "in")
+       width = 3.2, height = 3.2, units = "in")
 ```
 
 ```{r}
 report_main_effect("zf_r_allpair_mean")
 report_inter_age_sex_layer("zf_r_allpair_mean")
 ```
+
+
+##### Figure Supp2G (Mutual information)
+```{r}
+load (here("output","SummaryDevAll_Kmean_CovM_MI_Corr.RData"))
+```
+
+```{r,fig.width = 3, fig.asp = 0.75, echo=FALSE}
+plot_raw_boot_facet_layer_2age ("zf_r_allpair_mean",
+                           y_breaks = seq(0, 2 , by=0.4),
+                           y_limits = c(0,1.2), 
+                           legend_position = "right",
+                           title = "")
+ggsave("MI_zf_r_allpair_mean2age.svg", plot = last_plot(), path =here("output_plot"),
+       width = 3.2, height = 3.2, units = "in")
+```
+
+```{r}
+report_main_effect("zf_r_allpair_mean")
+report_inter_age_sex_layer("zf_r_allpair_mean")
+```
+
 

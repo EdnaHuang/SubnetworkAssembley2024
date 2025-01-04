@@ -44,8 +44,7 @@ source (here("src", "Develop_Function_posthoc_20240411.R"))
 ##### Figure 3A (single-cluster (%)) 
 ```{r}
 #result source
-load (here("output","2023-02-19_SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.RData"))
-
+load (here("output","SummaryDevAll_Kmean_CovM_withCorrDistArea.RData"))
 ```
 
 ````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
@@ -148,4 +147,22 @@ ggsave("centroid_centroid.svg", plot = last_plot(), path =here("output_plot"),
 ```{r}
 report_main_effect("centroid_centroid")
 report_inter_age_sex_layer("centroid_centroid")
+```
+
+
+##### Not included (Subnetwork area)
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_facet_layer_2age("subnetwork_area",
+                         y_breaks = seq(0,5000000, by=50000), 
+                         y_limits = c(0, 150000),
+                         legend_position = "right",
+                         title = "")
+ggsave("subnetwork_area.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 2.8, units = "in")
+````
+
+
+```{r}
+report_main_effect("subnetwork_area")
+report_inter_age_sex_layer("subnetwork_area")
 ```

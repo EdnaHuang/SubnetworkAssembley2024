@@ -44,7 +44,7 @@ source (here("src", "Develop_Function_posthoc_20240411.R"))
 ##### Figure 4A (Event frequency)
 ```{r}
 #result source
-load (here("output","2023-02-19_SummaryDevAll_basicParameter_MeanVersion_withCorr_20230113.RData"))
+load (here("output","SummaryDevAll_basicParameter.RData"))
 ```
 
 ```{r, fig.width = 3, fig.asp = 0.75, echo=FALSE}
@@ -83,18 +83,18 @@ report_inter_age_sex_layer("synchrony_freq")
 ##### Figure Supp4A (Pearson correlation coefficient)
 ```{r}
 #result source
-load (here("output","2024-01-11_SummaryDevAll_Kmean_CovM_Corr_in_outV2_20231204.RData"))
+load (here("output","SummaryDevAll_Kmean_CovM_withCorrDistArea.RData"))
 ```
 
-```{r, fig.width = 3, fig.asp = 0.75, echo=FALSE}
-plot_raw_boot_merge_sex ("zf_r_allpair_mean",
+```{r, fig.width = 3, fig.asp = 0.8, echo=FALSE}
+plot_raw_boot_facet_sex ("zf_r_allpair_mean",
                            y_breaks = seq(0,1, by= 0.2), 
                            y_limits = c(0.2, 1), 
-                           legend_position = "right",
+                           legend_position = "",
                            title = "") 
 
 ggsave("zf_r_allpair_mean.svg", plot = last_plot(), path =here("output_plot"),
-       width = 2.5, height = 3, units = "in")
+       width = 3.7, height = 3, units = "in")
 ```
 
 ```{r}
@@ -102,13 +102,36 @@ report_main_effect("zf_r_allpair_mean")
 report_inter_age_sex_layer("zf_r_allpair_mean")
 ```
 
+
+##### Figure Supp4B (Mutual information)
 ```{r}
 #result source
-load (here("output","2023-02-19_SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.RData"))
+load (here("output","SummaryDevAll_Kmean_CovM_MI_Corr.RData"))
+```
+
+```{r, fig.width = 3, fig.asp = 0.8, echo=FALSE}
+plot_raw_boot_facet_sex ("zf_r_allpair_mean",
+                           y_breaks = seq(0,2, by= 0.2), 
+                           y_limits = c(0, 1.2), 
+                           legend_position = "",
+                           title = "") 
+
+ggsave("MI_zf_r_allpair_mean.svg", plot = last_plot(), path =here("output_plot"),
+       width = 3.7, height = 3, units = "in")
+```
+
+```{r}
+report_main_effect("zf_r_allpair_mean")
+report_inter_age_sex_layer("zf_r_allpair_mean")
 ```
 
 
 ##### Figure 4C (subnetwork #)
+```{r}
+#result source
+load (here("output","SummaryDevAll_Kmean_CovM_withCorrDistArea.RData"))
+```
+
 ```{r, fig.width = 3, fig.asp = 0.75, echo=FALSE}
 plot_raw_boot_merge_sex ("n_cls",
                            y_breaks = seq(0,15, by= 3), 
@@ -145,10 +168,6 @@ report_inter_age_sex_layer("silhs_mean_before_stat")
 
 
 ##### Figure 4E (tetrachoric correlation-in the same subnetwork)
-```{r}
-#result source
-load (here("output","2024-01-11_SummaryDevAll_Kmean_CovM_Corr_in_outV2_20231204.RData"))
-```
 
 ```{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
 plot_raw_boot_facet_sex("in_r_mean",
@@ -160,17 +179,12 @@ ggsave("in_r_mean_allage.svg", plot = last_plot(), path =here("output_plot"),
        width = 4, height = 2.8, units = "in")
 ```
 
-
 ```{r}
 report_main_effect("in_r_mean")
 report_inter_age_sex_layer("in_r_mean")
 ```
 
 
-```{r}
-#result source
-load (here("output","2023-02-19_SummaryDevAll_Kmean_CovM_withCorr_Dist_20230113.RData"))
-```
 
 ##### Figure 4F (single-cluster(%))
 ```{r, fig.width = 3, fig.asp = 0.75, echo=FALSE}
@@ -205,6 +219,7 @@ report_inter_age_sex_layer("cells_not_in_assembly")
 ```
 
 
+
 ##### Figure 4H (Multiple-cluster(%))
 ```{r, fig.width = 3, fig.asp = 0.75, echo=FALSE}
 plot_raw_boot_merge_sex ("cells_in_many_assembly",
@@ -222,7 +237,7 @@ report_inter_age_sex_layer("cells_in_many_assembly")
 ```
 
 
-##### Figure Supp 4B (Pairwise distances between neurons)
+##### Figure Supp 4C (Pairwise distances between neurons)
 ````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
 plot_raw_boot_merge_sex("pw_neuron_neuron",
                          y_breaks = seq(0,400, by=100), 
@@ -239,7 +254,7 @@ report_inter_age_sex_layer("pw_neuron_neuron")
 ```
 
 
-##### Figure Supp 4C (Distance of neuron to subnetwork centroid)
+##### Figure Supp 4D (Distance of neuron to subnetwork centroid)
 ````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
 plot_raw_boot_merge_sex("neuron_centroid",
                          y_breaks = seq(0,200, by=50), 
@@ -256,7 +271,7 @@ report_inter_age_sex_layer("neuron_centroid")
 ```
 
 
-##### Figure Supp 4D (Pairwise distances between centroids)
+##### Figure Supp 4E (Pairwise distances between centroids)
 ```{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
 plot_raw_boot_merge_sex("centroid_centroid",
                          y_breaks = seq(0,400, by=100), 
@@ -273,5 +288,20 @@ report_inter_age_sex_layer("centroid_centroid")
 ```
 
 
+##### Figure Supp 4xxx (Subnetwrok area)
+````{r, fig.width = 5, fig.asp = 0.5,echo=FALSE}
+plot_raw_boot_merge_sex("subnetwork_area",
+                         y_breaks = seq(0,500000, by=50000), 
+                         y_limits = c(0, 150000),
+                         legend_position = "",
+                         title = "")
+ggsave("subnetwork_area_allage.svg", plot = last_plot(), path =here("output_plot"),
+       width = 2.5, height = 3, units = "in")
+````
+
+```{r}
+report_main_effect("subnetwork_area")
+report_inter_age_sex_layer("subnetwork_area")
+```
 
 
